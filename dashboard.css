@@ -3,19 +3,19 @@ body {
   padding: 0px 10px;
 }
 
-.general-text {
+.general-text, .filter-text, #summary-text, #start-cart-button, .location-text {
   font-family: "Plus Jakarta Sans", sans-serif;
   font-weight: 400;
   font-size: 14px;
   color: #3D4A42;
 }
 
-.outfit-title, .outfit-body {
+#logo-title, .outfit-body, .store-title {
   font-family: "Outfit", sans-serif;
   font-optical-sizing: auto;
   font-weight: 700;
 }
-.outfit-title {
+#logo-title {
   font-size: 22px;
   color: #00855B;
 }
@@ -39,7 +39,7 @@ body {
 }
 
 /* the banner components for the top of the page */
-.header {
+#banner {
   position: sticky;
   top: 0;
   z-index: 9999;
@@ -48,19 +48,19 @@ body {
   align-items: center;
 }
 
-.center-banner-part, .left-banner-part, .right-banner-part {
+#center-banner-part, #left-banner-part, #right-banner-part {
   display: flex;
   align-items: center;
 }
-.left-banner-part {
+#left-banner-part {
   justify-self: start;
   gap: 8px;
 }
-.center-banner-part {
+#center-banner-part {
   gap: 4px;
 
 }
-.right-banner-part {
+#right-banner-part {
   justify-self: end;
 }
 
@@ -91,22 +91,157 @@ body {
 }
 
 /* rules for "Active Community Carts" section */
-.main-title {
+#main-title {
   font-size: 32px;
   font-family: "Outfit", sans-serif;
   font-weight: 700;
 }
 
+#circle {
+  /* Background */
+  width: 10px;
+  height: 10px;
+
+  background: #006947;
+  border-radius: 50%;
+
+  /* Inside auto layout */
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+#summary-and-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+#start-cart-button {
+  padding: 8px 16px 8px 16px;
+  background: #006947;
+  border: none;
+  border-radius: 8px;
+  color: white;
+}
+
 .filter-button {
   background: #E5EEFF;
-  padding: 4px 8px;
+  padding: 4px 12px;
   color: #3D4A42;
   border: none;
   border-radius: 9999px;
+  padding: 6px 16px;
 }
 
-.filter-list {
+#filter-list {
   display: flex;
   flex-direction: row;
   gap: 5px;
+}
+
+.filter-text {
+  font-size: 12px;
+}
+
+#cart-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.cart-cell {
+  padding: 24px;
+  background: white;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+}
+
+.details-row {
+  display: flex;
+  justify-content: space-between;
+}
+.other-account-pill, .timer-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px 4px 8px;
+  border: none;
+  border-radius: 9999px;
+  background: #EFF4FF;
+  cursor: pointer;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 11px;
+}
+.other-account-initials {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #86F8C2;
+  color: #3D4A42;
+  font-weight: bold;
+  font-size: 11px;
+}
+
+.timer-pill {
+  font-weight: bold;
+}
+
+.store-title {
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.spots-left-text {
+  color: #006947;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+.location-text {
+  font-size: 12px;
+}
+
+.status-cell {
+  background: #EFF4FF;
+  padding: 8px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 4px;
+}
+.status-row {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 11px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.progress-track {
+  height: 8px;
+  min-width: 100%;
+  background: #DCE9FF;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  width: 68%;
+  height: 8px;
+  background: #006947;
+  border-radius: 10px;
+}
+
+.join-button {
+  background: #006947;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-weight: 600;
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
 }
