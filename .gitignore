@@ -1,0 +1,18 @@
+# Node.js
+node_modules/
+frontend/node_modules/
+frontend/dist/
+
+# Python
+venv/
+.venv/
+backend/venv/
+backend/.venv/
+__pycache__/
+*.py[cod]
+
+# Environment files (keep templates under version control)
+.env
+.env.*
+!.env.example
+!*.env.example

@@ -1,0 +1,13 @@
+main {
+  text-align: center;
+}
+
+h1 {
+  margin: 0;
+  font-size: 2.5rem;
+}
+
+p {
+  margin: 0.75rem 0 0;
+  color: #4b5563;
+}
