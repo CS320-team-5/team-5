@@ -1,12 +1,11 @@
-"""Supabase Cart routes: save as backend/app/cart.py.
 
-Uses app/database.py get_supabase(). No in-memory data or ID counter.
-GET requests use the publishable client and are subject to RLS.
-Writes are disabled until get_cart_session supplies a verified integer users.userid
-and a request-scoped Supabase client carrying the user's access token.
-CREATE assumes the database generates cartid; the supplied SQL needs that change.
-Do not replace missing authentication with a hardcoded user or a caller-supplied ID.
-"""
+#Uses app/database.py get_supabase(). No in-memory data or ID counter.
+#GET requests use the publishable client and are subject to RLS.
+#Writes are disabled until get_cart_session supplies a verified integer users.userid
+#and a request-scoped Supabase client carrying the user's access token.
+#CREATE assumes the database generates cartid; the supplied SQL needs that change.
+#Do not replace missing authentication with a hardcoded user or a caller-supplied ID.
+
 from dataclasses import dataclass
 from decimal import Decimal
 from typing import Literal
