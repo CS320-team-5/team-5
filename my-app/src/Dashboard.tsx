@@ -1,5 +1,6 @@
-import '../../dashboard.css'
+import './dashboard.css'
 import { useState, useEffect } from 'react'
+import { Template } from "./Template";
 
 const url = "my-url";
 
@@ -13,10 +14,10 @@ Here is a simple example of the carts JSON
 const carts = [
   {
     owner: "Alex M.",
-    time_left: 15,
+    timeLeft: 15,
     store: "Local Grocery Mart",
-    pickup_location: "Building 4 Mailroom",
-    open_spots: 2,
+    pickupLocation: "Building 4 Mailroom",
+    openSpots: 2,
     threshold: 50,
     curr: 34,
   }
@@ -49,8 +50,7 @@ function Dashboard() {
     return () => { controller.abort(); };
   }, []); // indicate that this should load on mount
 
-
-
+  return <><Template cartList={results}></Template></>;
 }
 
 export default Dashboard
