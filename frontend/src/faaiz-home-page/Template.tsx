@@ -1,19 +1,9 @@
-//import './dashboard.css'
 import { CartList } from './CartList';
 import { type CartDetails } from './types';
 
 export function Template({ cartList }: { cartList: CartDetails[] }) {
   return (
-  <html>
-    <head>
-      <link rel="stylesheet" href="dashboard.css" /> 
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" />
-      <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet" />
-      <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet" />
-      <title>Home Page - Co-Cart</title>
-    </head>
-    <body>
+    <>
       <div id="banner">
         <div id="left-banner-part">
           <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -73,9 +63,6 @@ export function Template({ cartList }: { cartList: CartDetails[] }) {
       <div id="cart-list">
         <CartList cartList={cartList}></CartList>
       </div>
-    </body>
-  
-
-  </html>
+    </>
   );
 }

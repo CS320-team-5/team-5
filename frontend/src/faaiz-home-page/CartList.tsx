@@ -1,4 +1,3 @@
-//import "./dashboard.css";
 import { type CartDetails } from "./types";
 
 /*
