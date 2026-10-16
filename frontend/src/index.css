@@ -12,9 +12,7 @@ body {
   margin: 0;
 }
 
-#root {
-  display: grid;
-  min-height: 100vh;
-  place-items: center;
-  padding: 2rem;
+p {
+  color: #4b5563;
+  line-height: 1.6;
 }
