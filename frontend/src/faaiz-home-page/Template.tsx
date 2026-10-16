@@ -1,4 +1,4 @@
-import './dashboard.css'
+//import './dashboard.css'
 import { CartList } from './CartList';
 import { type CartDetails } from './types';
 
