@@ -6,7 +6,6 @@
 #CREATE assumes the database generates cartid; the supplied SQL needs that change.
 #Do not replace missing authentication with a hardcoded user or a caller-supplied ID.
 
-from dataclasses import dataclass
 from decimal import Decimal
 from typing import Literal
 
@@ -17,6 +16,7 @@ from pydantic import AwareDatetime, BaseModel, ConfigDict, Field
 from supabase import Client
 
 from .database import get_supabase
+from .auth import AuthSession, get_auth_session
 
 # Allowed statuses from the Supabase cart table.
 CartStatus = Literal["Active", "Inactive"]
@@ -47,28 +47,6 @@ class Cart(CartCreate):
     status: CartStatus = "Active"
     currentamount: Decimal = Field(default=Decimal("0.00"), ge=0, max_digits=10, decimal_places=2)
 
-
-@dataclass
-class CartSession:
-    db: Client
-    user_id: int | None = None
-
-
-def get_cart_session() -> CartSession:
-    # TODO AUTH: replace with the team's verified login dependency.
-    # Resolve the auth identity to public.users.userid (an INTEGER, not an auth UUID).
-    # Supply a fresh client carrying that user's token so RLS can identify them.
-    # Never set user-specific tokens on the shared cached client.
-    return CartSession(db=get_supabase())
-
-
-def require_user(session: CartSession) -> int:
-    if session.user_id is None:
-        raise HTTPException(
-            status_code=501,
-            detail="Cart writes await the team's authentication integration",
-        )
-    return session.user_id
 
 
 def execute_query(query):
@@ -106,16 +84,36 @@ router = APIRouter(prefix="/api/cart", tags=["Cart"])
 
 
 @router.post("", response_model=Cart, status_code=201)
-def create_cart(body: CartCreate, session: CartSession = Depends(get_cart_session)):
-    user_id = require_user(session)
-    # mode="json" serializes dates and Decimal values for the HTTP request.
+def create_cart(
+    body: CartCreate,
+    session: AuthSession = Depends(get_auth_session),
+):
     values = body.model_dump(mode="json")
-    values["owneruserid"] = user_id
-    # cartid, status and currentamount come from database defaults.
-    rows = execute_query(session.db.table("cart").insert(values, returning="representation"))
+
+    values["owneruserid"] = session.user_id
+
+    rows = execute_query(
+        session.db
+        .table("cart")
+        .insert(values)
+        .select("*")
+    )
+
     if not rows:
-        raise HTTPException(502, "Insert returned no cart; check SELECT permissions before retrying")
+        raise HTTPException(
+            502,
+            "Insert returned no cart",
+        )
+
     return Cart(**rows[0])
+
+
+@router.get("/{cart_id}", response_model=Cart)
+def get_cart(
+    cart_id: int = Path(gt=0),
+    db: Client = Depends(get_supabase),
+):
+    return find_cart(db, cart_id)
 
 
 @router.get("", response_model=list[Cart])
@@ -123,76 +121,75 @@ def get_all_carts(
     status: CartStatus | None = None,
     storeid: int | None = None,
     owneruserid: int | None = None,
-    session: CartSession = Depends(get_cart_session),
+    db: Client = Depends(get_supabase),
 ):
-    query = session.db.table("cart").select("*").order("cartid")
-    if status is not None:
-        query = query.eq("status", status)
-    if storeid is not None:
-        query = query.eq("storeid", storeid)
-    if owneruserid is not None:
-        query = query.eq("owneruserid", owneruserid)
-    # Fetch pages so the API's default row limit doesn't silently truncate results.
-    results = []
-    page_size = 100
-    offset = 0
-    while True:
-        rows = execute_query(query.range(offset, offset + page_size - 1))
-        results.extend(Cart(**row) for row in rows)
-        if len(rows) < page_size:
-            return results
-        offset += page_size
-
-
-@router.get("/{cart_id}", response_model=Cart)
-def get_cart(
-    cart_id: int = Path(gt=0),
-    session: CartSession = Depends(get_cart_session),
-):
-    return find_cart(session.db, cart_id)
+    query = db.table("cart").select("*").order("cartid")
 
 
 @router.patch("/{cart_id}", response_model=Cart)
 def update_cart(
     body: CartUpdate,
     cart_id: int = Path(gt=0),
-    session: CartSession = Depends(get_cart_session),
+    session: AuthSession = Depends(get_auth_session),
 ):
-    user_id = require_user(session)
     cart = find_cart(session.db, cart_id)
-    check_owner(cart, user_id)
-    changes = body.model_dump(mode="json", exclude_unset=True)
+
+    check_owner(cart, session.user_id)
+
+    changes = body.model_dump(
+        mode="json",
+        exclude_unset=True,
+    )
+
     for field in ("status", "minimumamount"):
         if field in changes and changes[field] is None:
-            raise HTTPException(422, f"{field} cannot be null")
+            raise HTTPException(
+                422,
+                f"{field} cannot be null",
+            )
+
     if not changes:
         return cart
+
     rows = execute_query(
-        session.db.table("cart")
-        .update(changes, returning="representation")
+        session.db
+        .table("cart")
+        .update(changes)
         .eq("cartid", cart_id)
-        .eq("owneruserid", user_id)
+        .eq("owneruserid", session.user_id)
+        .select("*")
     )
+
     if not rows:
-        raise HTTPException(409, "No updated cart returned; check RLS or whether ownership changed")
+        raise HTTPException(
+            409,
+            "No updated cart returned",
+        )
+
     return Cart(**rows[0])
 
 
 @router.delete("/{cart_id}", status_code=204)
 def delete_cart(
     cart_id: int = Path(gt=0),
-    session: CartSession = Depends(get_cart_session),
+    session: AuthSession = Depends(get_auth_session),
 ):
-    user_id = require_user(session)
     cart = find_cart(session.db, cart_id)
-    check_owner(cart, user_id)
-    # Foreign keys enforce the team's deletion rules; no separate child deletes.
+
+    check_owner(cart, session.user_id)
+
     rows = execute_query(
-        session.db.table("cart")
-        .delete(returning="representation")
+        session.db
+        .table("cart")
+        .delete()
         .eq("cartid", cart_id)
-        .eq("owneruserid", user_id)
+        .eq("owneruserid", session.user_id)
     )
+
     if not rows:
-        raise HTTPException(409, "No deleted cart returned; check RLS or whether ownership changed")
+        raise HTTPException(
+            409,
+            "No deleted cart returned",
+        )
+
     return Response(status_code=204)

@@ -14,11 +14,25 @@ load_dotenv(env_path)
 @lru_cache
 def get_supabase() -> Client:
     url = os.getenv("SUPABASE_URL")
-    key = os.getenv("SUPABASE_KEY")
+    key = os.getenv("SUPABASE_PUBLISHABLE_KEY")
 
     if not url or not key:
         raise RuntimeError(
-            "Set SUPABASE_URL and SUPABASE_KEY in backend/.env"
+            "Set SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY in backend/.env"
         )
 
     return create_client(url, key)
+
+def get_user_supabase(access_token: str) -> Client:
+    url = os.getenv("SUPABASE_URL")
+    key = os.getenv("SUPABASE_PUBLISHABLE_KEY")
+
+    if not url or not key:
+        raise RuntimeError(
+            "Set SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY in backend/.env"
+        )
+
+    client = create_client(url, key)
+    client.postgrest.auth(access_token)
+
+    return client
