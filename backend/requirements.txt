@@ -1,2 +1,6 @@
 fastapi
 uvicorn[standard]
+supabase
+python-dotenv
+pytest 
+httpx
