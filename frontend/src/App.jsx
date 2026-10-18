@@ -1,12 +1,9 @@
 import './App.css'
 
+import SignUpPage from "./signup/signUpPage";
+
 function App() {
-  return (
-    <main>
-      <h1>CoCart</h1>
-      <p>Frontend is running.</p>
-    </main>
-  )
+  return <SignUpPage />;
 }
 
 export default App
