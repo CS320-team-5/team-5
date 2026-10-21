@@ -14,6 +14,8 @@ export function CartList({ cartList }: { cartList: CartDetails[] }) {
     const oneSpotLeft = cartDetails.openSpots == 1;
     // use this to make text for time red if at most 15 m left
     const nearDeadline = cartDetails.timeLeft <= 15;
+    // finally, use this to set the width of the progress bar
+    const percentage = Math.min(Math.floor(cartDetails.curr / cartDetails.threshold * 100), 100);
     return <>
       <div className="cart-cell">
         <div className="details-row">
@@ -40,7 +42,7 @@ export function CartList({ cartList }: { cartList: CartDetails[] }) {
             <div style={{color: "#B5260B", fontWeight: 700}}>${cartDetails.threshold - cartDetails.curr} needed</div>
           </div>
           <div className="progress-track">
-            <div className="progress-fill"></div>
+            <div className="progress-fill" style={{ width: `${percentage}%` }}></div>
           </div>
         </div>
         <div className="join-button">Join Cart</div>
