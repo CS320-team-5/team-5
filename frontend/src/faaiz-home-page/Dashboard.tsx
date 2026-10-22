@@ -63,10 +63,19 @@ const arr = [
   }
 ];
 
-const cartlist: CartDetails[] = arr.map((obj, i) => ({...obj, id: i }));
+const filterArray = [
+  "All Carts",
+  "Apartments & Condos",
+  "Groceries",
+  "Takeout",
+  "Coffee & Boba"
+];
+
+const cartArray: CartDetails[] = arr.map((obj, i) => ({...obj, id: i }));
 
 function Dashboard() {
   const [results, setCartList] = useState(Array<CartDetails>());
+  const [filters, setFilterList] = useState(Array<string>());
   useEffect (() => {
     const controller = new AbortController();
     const { signal } = controller;
@@ -87,14 +96,18 @@ function Dashboard() {
         });
     }
     setTimeout(
-      () => setCartList(cartlist),
+      () => setCartList(cartArray),
       2000
+    );
+    setTimeout(
+      () => setFilterList(filterArray),
+      1500
     );
     return () => { controller.abort(); };
   }, []); // indicate that this should load on mount
   console.log(results);
 
-  return <><Template cartList={results}></Template></>;
+  return <><Template cartList={results} filterList={filters}></Template></>;
 }
 
 export default Dashboard

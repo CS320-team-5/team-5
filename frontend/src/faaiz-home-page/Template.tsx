@@ -1,7 +1,7 @@
-import { CartList } from './CartList';
+import { CartList, FilterList } from './CartList';
 import { type CartDetails } from './types';
 
-export function Template({ cartList }: { cartList: CartDetails[] }) {
+export function Template({ cartList, filterList }: { cartList: CartDetails[], filterList: string[] }) {
   return (
     <>
       <div id="banner">
@@ -42,22 +42,7 @@ export function Template({ cartList }: { cartList: CartDetails[] }) {
       </div>
       <br />
       <div id="filter-list">
-        <button className="filter-button">
-          <span className="filter-text">All Carts</span>
-        </button>
-        <button className="filter-button">
-          <span className="filter-text">Apartments & Condos</span>
-        </button>
-        <button className="filter-button">
-          <span className="filter-text">Groceries</span>
-        </button>
-        <button className="filter-button">
-          <span className="filter-text">Takeout</span>
-        </button>
-        <button className="filter-button">
-          <span className="filter-text">Coffee & Boba</span>
-        </button>
-
+        <FilterList filterList={filterList}></FilterList>
       </div>
       <br />
       <div id="cart-list">
