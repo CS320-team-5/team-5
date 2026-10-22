@@ -18,3 +18,8 @@ body {
   place-items: center;
   padding: 2rem;
 }
+
+p {
+  color: #4b5563;
+  line-height: 1.6;
+}
