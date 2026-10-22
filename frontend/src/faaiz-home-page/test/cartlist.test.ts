@@ -42,8 +42,3 @@ const arr = [
 ];
 
 const carts: CartDetails[] = arr.map((obj, i) => ({...obj, id: i }));
-
-test("Cart Tests", () => {
-  const x = 4*6;
-  expect(x).toEqual(20);
-});
