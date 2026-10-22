@@ -4,6 +4,7 @@ from .auth import AuthSession, get_auth_session
 from .cart import router as cart_router
 from .user import router as user_router
 
+
 app = FastAPI()
 
 app.include_router(cart_router)
@@ -30,3 +31,4 @@ def auth_test(
         "user_id": session.user_id,
     }
 
+    
