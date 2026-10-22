@@ -123,6 +123,9 @@ body {
   border-radius: 8px;
   color: white;
 }
+#start-cart-button:hover {
+  background-color: #1f4732;
+}
 
 .filter-button {
   background: #E5EEFF;
@@ -243,4 +246,7 @@ body {
   padding: 10px;
   border-radius: 8px;
   text-align: center;
+}
+.join-button:hover {
+  background-color: #1f4732;
 }
