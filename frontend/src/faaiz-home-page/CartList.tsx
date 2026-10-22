@@ -1,23 +1,19 @@
 import { type CartDetails } from "./types";
-// see types.ts for the structure of a CartDetails object
 
-/**
- * Returns a div containing the formatted contents of the 
- * @param param0 
- * @returns 
- */
+/** Render the current cart data as cards. */
 export function CartList({ cartList }: { cartList: CartDetails[] }) {
   return cartList.map(cartDetails => {
     // initials used in icon for owner account of each cart entry
     const initials = cartDetails.owner.split(' ').reduce((acc, e) => acc + e.charAt(0), '');
     // use this to make "spots" plural or singular in cart entry and also to make text red if true
-    const oneSpotLeft = cartDetails.openSpots == 1;
+    const oneSpotLeft = cartDetails.openSpots === 1;
     // use this to make text for time red if at most 15 m left
     const nearDeadline = cartDetails.timeLeft <= 15;
     // finally, use this to set the width of the progress bar
     const percentage = Math.min(Math.floor(cartDetails.curr / cartDetails.threshold * 100), 100);
-    return <>
-      <div className="cart-cell">
+    const amountNeeded = Math.max(cartDetails.threshold - cartDetails.curr, 0);
+    return (
+      <div className="cart-cell" key={cartDetails.id}>
         <div className="details-row">
           <div className="other-account-pill">
             <div className="other-account-initials">{initials}</div>
@@ -39,15 +35,22 @@ export function CartList({ cartList }: { cartList: CartDetails[] }) {
         <div className="status-cell">
           <div className="status-row">
             <div>${cartDetails.curr} of ${cartDetails.threshold} target</div>
-            <div style={{color: "#B5260B", fontWeight: 700}}>${cartDetails.threshold - cartDetails.curr} needed</div>
+            <div style={{color: "#B5260B", fontWeight: 700}}>${amountNeeded} needed</div>
           </div>
-          <div className="progress-track">
+          <div
+            className="progress-track"
+            role="progressbar"
+            aria-label={`${cartDetails.store} delivery minimum`}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={percentage}
+          >
             <div className="progress-fill" style={{ width: `${percentage}%` }}></div>
           </div>
         </div>
-        <div className="join-button">Join Cart</div>
+        <button className="join-button" type="button">Join Cart</button>
       </div>
-    </>;
+    );
   });
 }
 
@@ -57,11 +60,9 @@ export function CartList({ cartList }: { cartList: CartDetails[] }) {
  * @param param0 An object containing a single member (filterList), an array of strings
  */
 export function FilterList({ filterList }: { filterList: string[] }) {
-  return filterList.map(filter => 
-    <>
-      <button className="filter-button">
-        <span className="filter-text">{filter}</span>
-      </button>
-    </>
-  );
+  return filterList.map(filter => (
+    <button className="filter-button" type="button" key={filter}>
+      <span className="filter-text">{filter}</span>
+    </button>
+  ));
 }

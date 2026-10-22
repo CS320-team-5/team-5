@@ -1,28 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Template } from "./Template";
-import { CartDetails } from './types';
-
-const url = "my-url";
-
-/*
-The url endpoint is expected to return an array of JSON objects
-*/
-
-
-/*
-Here is a simple example of the carts JSON
-const carts = [
-  {
-    owner: "Alex M.",
-    timeLeft: 15,
-    store: "Local Grocery Mart",
-    pickupLocation: "Building 4 Mailroom",
-    openSpots: 2,
-    threshold: 50,
-    curr: 34,
-  }
-];
-*/
+import { type CartDetails } from './types';
+import './dashboard.css';
 
 const arr = [
   {
@@ -74,40 +53,29 @@ const filterArray = [
 const cartArray: CartDetails[] = arr.map((obj, i) => ({...obj, id: i }));
 
 function Dashboard() {
-  const [results, setCartList] = useState(Array<CartDetails>());
-  const [filters, setFilterList] = useState(Array<string>());
+  const [results, setCartList] = useState<CartDetails[]>([]);
+  const [filters, setFilterList] = useState<string[]>([]);
   useEffect (() => {
-    const controller = new AbortController();
-    const { signal } = controller;
-    function fetchData() {
-      fetch(url, { signal })
-        .then(res => res.ok ? res.json() : Promise.reject(new Error(res.statusText)))
-        .then(carts =>
-          // we create an abort controller to handle quitting fetch
-          // here, we modify the results object to store the acquired carts
-          setCartList(carts)
-        )
-        .catch(e => {
-          if (e.name === 'AbortError') {
-            console.log("page switched from dashboard, quitting fetch");
-          } else {
-            console.log("fetch request failed");
-          }
-        });
-    }
-    setTimeout(
+    // Simulate loading until the cart and filter APIs are connected.
+    const cartsTimeout = window.setTimeout(
       () => setCartList(cartArray),
       2000
     );
-    setTimeout(
+    const filtersTimeout = window.setTimeout(
       () => setFilterList(filterArray),
       1500
     );
-    return () => { controller.abort(); };
+    return () => {
+      window.clearTimeout(cartsTimeout);
+      window.clearTimeout(filtersTimeout);
+    };
   }, []); // indicate that this should load on mount
-  console.log(results);
 
-  return <><Template cartList={results} filterList={filters}></Template></>;
+  return (
+    <div className="dashboard-page">
+      <Template cartList={results} filterList={filters} />
+    </div>
+  );
 }
 
 export default Dashboard
