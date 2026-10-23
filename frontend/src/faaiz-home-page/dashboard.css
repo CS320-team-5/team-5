@@ -148,12 +148,15 @@
 }
 
 .dashboard-page .filter-button {
-  background: #E5EEFF;
+  background-color: #E5EEFF;
   padding: 6px 16px;
   color: #3D4A42;
   border: none;
   border-radius: 9999px;
   cursor: pointer;
+}
+.filter-button:hover {
+  background-color: #D5E4FF;
 }
 
 .dashboard-page #filter-list {
