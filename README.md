@@ -12,6 +12,27 @@ npm install
 npm run dev
 ```
 
+The shared `frontend/index.html` loads `src/main.jsx`, which renders `App.jsx`.
+The landing page is at `/` and the dashboard is at `/dashboard`. Use the
+landing page's **Browse carts** link to open the dashboard, and the dashboard's
+CoCart logo to return home. Direct visits and reloads of `/dashboard` work with Vite;
+production hosting must serve `index.html` for app routes as well.
+
+Each page imports its own CSS. Landing styles are scoped to `.landing-page`
+and dashboard styles to `.dashboard-page`; `index.css` contains shared defaults.
+The dashboard still uses sample carts and filters. Login, signup, start-cart,
+join-cart, and filter actions remain placeholders for later integration.
+
+Run frontend checks with:
+
+```bash
+cd frontend
+npm ci
+npm run build
+npm run lint
+npm run test -- --run
+```
+
 ## Backend
 
 From the project root:
