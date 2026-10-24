@@ -4,3 +4,5 @@ supabase
 python-dotenv
 pytest 
 httpx
+postgrest
+pydantic
