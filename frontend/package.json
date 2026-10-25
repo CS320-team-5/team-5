@@ -11,6 +11,7 @@
     "test": "vitest"
   },
   "dependencies": {
+    "lucide-react": "^1.59.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "supabase-js": "^0.0.1-security"

@@ -1,0 +1,161 @@
+.signup-page {
+  min-height: 100vh;
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+}
+
+.signup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 32px;
+}
+
+.signup-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.brand-dot {
+  color: #166534;
+}
+
+.login-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.signup-content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.signup-card {
+  width: 100%;
+  max-width: 580px;
+  background: white;
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.05);
+}
+
+.signup-title {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+.signup-subtitle {
+  text-align: center;
+  color: #64748b;
+  margin-top: 8px;
+}
+
+.social-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.social-buttons button {
+  background: #f1f5f9;
+  border: none;
+  border-radius: 12px;
+  padding: 16px;
+  cursor: pointer;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.divider-line {
+  flex: 1;
+  height: 1px;
+  background: #e2e8f0;
+}
+
+.divider-text {
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid #d1d5db;
+  box-sizing: border-box;
+}
+
+.address-wrapper {
+  position: relative;
+}
+
+.map-icon {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+}
+
+.checkbox-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.create-account-button {
+  width: 100%;
+  margin-top: 24px;
+  padding: 16px;
+  background: #166534;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.login-link {
+  text-align: center;
+  margin-top: 20px;
+  color: #64748b;
+}
+
+.login-link span {
+  color: #166534;
+  cursor: pointer;
+}
+
+.signup-footer {
+  text-align: center;
+  padding: 24px;
+  color: #64748b;
+}
