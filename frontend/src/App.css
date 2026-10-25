@@ -4,7 +4,7 @@
   padding: 0 24px;
 }
 
-header {
+.landing-page header {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -14,14 +14,14 @@ header {
   border-bottom: 1px solid #e5e7eb;
 }
 
-.logo {
+.landing-page .logo {
   color: #285b40;
   font-size: 24px;
   font-weight: bold;
   text-decoration: none;
 }
 
-nav {
+.landing-page nav {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -29,11 +29,16 @@ nav {
   font-size: 14px;
 }
 
-nav > a {
+.landing-page nav > a {
   color: #4b5563;
 }
 
-.hero {
+.landing-page p {
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+.landing-page .hero {
   display: grid;
   grid-template-columns: 3fr 2fr;
   align-items: center;
@@ -41,7 +46,7 @@ nav > a {
   padding: 64px 0;
 }
 
-.delivery-picture {
+.landing-page .delivery-picture {
   display: block;
   width: 100%;
   max-width: 320px;
@@ -49,19 +54,19 @@ nav > a {
   justify-self: center;
 }
 
-.hero h1 {
+.landing-page .hero h1 {
   max-width: 640px;
   margin: 0 0 20px;
   font-size: 42px;
   line-height: 1.2;
 }
 
-.hero p {
+.landing-page .hero p {
   max-width: 600px;
   margin-bottom: 28px;
 }
 
-.button {
+.landing-page .button {
   display: inline-block;
   padding: 10px 18px;
   border: 1px solid #285b40;
@@ -73,42 +78,42 @@ nav > a {
   cursor: pointer;
 }
 
-.button:hover {
+.landing-page .button:hover {
   background: #1f4732;
 }
 
-.button-outline {
+.landing-page .button-outline {
   background: transparent;
   color: #285b40;
 }
 
-.button-outline:hover {
+.landing-page .button-outline:hover {
   background: #edf3ee;
 }
 
-.steps {
+.landing-page .steps {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 24px;
   margin: 24px 0 48px;
 }
 
-.steps h3 {
+.landing-page .steps h3 {
   font-size: 18px;
 }
 
-.get-started {
+.landing-page .get-started {
   margin-bottom: 40px;
   padding: 24px;
   background: #edf3ee;
   border-radius: 6px;
 }
 
-.get-started h2 {
+.landing-page .get-started h2 {
   margin-top: 0;
 }
 
-footer {
+.landing-page footer {
   padding: 24px 0;
   border-top: 1px solid #e5e7eb;
   color: #6b7280;
@@ -116,20 +121,20 @@ footer {
 }
 
 @media (max-width: 650px) {
-  .hero {
+  .landing-page .hero {
     grid-template-columns: 1fr;
     padding: 40px 0;
   }
 
-  .delivery-picture {
+  .landing-page .delivery-picture {
     max-width: 240px;
   }
 
-  .hero h1 {
+  .landing-page .hero h1 {
     font-size: 32px;
   }
 
-  .steps {
+  .landing-page .steps {
     grid-template-columns: 1fr;
     gap: 8px;
   }
