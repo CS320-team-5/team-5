@@ -1,4 +1,4 @@
-export type CartDetails = { 
+export type CartDetails = {
   id: React.Key,
   owner: string,
   timeLeft: number,

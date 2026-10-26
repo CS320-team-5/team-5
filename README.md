@@ -13,15 +13,34 @@ npm run dev
 ```
 
 The shared `frontend/index.html` loads `src/main.jsx`, which renders `App.jsx`.
-The landing page is at `/` and the dashboard is at `/dashboard`. Use the
-landing page's **Browse carts** link to open the dashboard, and the dashboard's
-CoCart logo to return home. Direct visits and reloads of `/dashboard` work with Vite;
+The landing page is at `/`, the dashboard at `/dashboard`, and signup at `/signup`.
+The landing page links to both screens. Direct visits and reloads work with Vite;
 production hosting must serve `index.html` for app routes as well.
 
-Each page imports its own CSS. Landing styles are scoped to `.landing-page`
-and dashboard styles to `.dashboard-page`; `styles/global.css` contains shared defaults.
-The dashboard still uses sample carts and filters. Login, signup, start-cart,
-join-cart, and filter actions remain placeholders for later integration.
+```text
+frontend/src/
+  App.jsx                 Selects the page based on the URL
+  main.jsx                Starts React and loads global styles
+  pages/                  Landing, dashboard, and signup screens
+  components/dashboard/   Dashboard content, cart cards, and filter buttons
+  data/dashboard.ts       Temporary sample carts and filters
+  types/cart.ts           Cart data used by the dashboard components
+  styles/                 Global defaults and a stylesheet for each page
+  lib/                    Supabase client setup
+  services/               Authentication helpers and future API requests
+```
+
+Pages import their own stylesheet, with selectors scoped to the page's wrapper
+class. Keep shared defaults and resets in `styles/global.css`.
+
+`DashboardPage` owns the cart and filter state; dashboard components receive data
+through props. When connecting the backend, put requests in `services/`, map the
+API response to `CartDetails`, and load the results in `DashboardPage` instead of
+the sample data in `data/dashboard.ts`.
+
+The dashboard still uses sample carts and filters. Signup renders the existing
+screen; authentication, start-cart, join-cart, and filter actions remain
+placeholders for later integration.
 
 Run frontend checks with:
 

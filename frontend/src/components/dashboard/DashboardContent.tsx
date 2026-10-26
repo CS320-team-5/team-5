@@ -1,7 +1,8 @@
-import { CartList, FilterList } from './CartList';
-import { type CartDetails } from './types';
+import { CartList } from './CartList';
+import { FilterList } from './FilterList';
+import { type CartDetails } from '../../types/cart';
 
-export function Template({ cartList, filterList }: { cartList: CartDetails[], filterList: string[] }) {
+export function DashboardContent({ cartList, filterList }: { cartList: CartDetails[], filterList: string[] }) {
   return (
     <>
       <header id="banner">

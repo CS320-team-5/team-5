@@ -9,7 +9,7 @@ function LandingPage() {
           <a href="#how-it-works">How it works</a>
           <a href="/dashboard">Browse carts</a>
           <button className="button button-outline" type="button">Log in</button>
-          <button className="button" type="button">Sign up</button>
+          <a className="button" href="/signup">Sign up</a>
         </nav>
       </header>
 
@@ -52,7 +52,7 @@ function LandingPage() {
         <section className="get-started" id="get-started">
           <h2>Ready to order together?</h2>
           <p>Create or join a cart and find someone to shop with.</p>
-          <button className="button" type="button">Sign up</button>
+          <a className="button" href="/signup">Sign up</a>
         </section>
       </main>
 

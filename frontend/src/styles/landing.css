@@ -38,7 +38,7 @@
   font-size: 14px;
 }
 
-.landing-page nav > a {
+.landing-page nav > a:not(.button) {
   color: #4b5563;
 }
 

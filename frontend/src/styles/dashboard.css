@@ -159,7 +159,7 @@
   border-radius: 9999px;
   cursor: pointer;
 }
-.filter-button:hover {
+.dashboard-page .filter-button:hover {
   background-color: #D5E4FF;
 }
 

@@ -1,8 +1,9 @@
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { test, expect } from 'vitest';
-import { CartList, FilterList } from '../CartList';
-import { type CartDetails } from '../types';
+import { CartList } from './CartList';
+import { FilterList } from './FilterList';
+import { type CartDetails } from '../../types/cart';
 
 const carts: CartDetails[] = [
   {
