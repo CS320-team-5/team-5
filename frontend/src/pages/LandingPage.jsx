@@ -7,6 +7,7 @@ function LandingPage() {
         <a className="logo" href="#">CoCart</a>
         <nav aria-label="Main navigation">
           <a href="#how-it-works">How it works</a>
+          <a href="/dashboard">Browse carts</a>
           <button className="button button-outline" type="button">Log in</button>
           <button className="button" type="button">Sign up</button>
         </nav>
