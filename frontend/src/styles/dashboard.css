@@ -1,3 +1,7 @@
+.dashboard-page main {
+  text-align: center;
+}
+
 .dashboard-page {
   background-color: #F8F9FF;
   min-height: 100vh;
@@ -155,7 +159,7 @@
   border-radius: 9999px;
   cursor: pointer;
 }
-.filter-button:hover {
+.dashboard-page .filter-button:hover {
   background-color: #D5E4FF;
 }
 

@@ -1,4 +1,4 @@
-import "./signup.css";
+import '../styles/signup.css';
 import { ArrowRight, MapPin } from "lucide-react";
 
 export default function SignUpPage() {

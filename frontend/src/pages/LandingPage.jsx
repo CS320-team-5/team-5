@@ -1,4 +1,5 @@
-import '../App.css'
+import { Link } from 'react-router'
+import '../styles/landing.css'
 
 function LandingPage() {
   return (
@@ -7,9 +8,9 @@ function LandingPage() {
         <a className="logo" href="#">CoCart</a>
         <nav aria-label="Main navigation">
           <a href="#how-it-works">How it works</a>
-          <a href="/dashboard">Browse carts</a>
+          <Link to="/dashboard">Browse carts</Link>
           <button className="button button-outline" type="button">Log in</button>
-          <button className="button" type="button">Sign up</button>
+          <Link className="button" to="/signup">Sign up</Link>
         </nav>
       </header>
 
@@ -52,7 +53,7 @@ function LandingPage() {
         <section className="get-started" id="get-started">
           <h2>Ready to order together?</h2>
           <p>Create or join a cart and find someone to shop with.</p>
-          <button className="button" type="button">Sign up</button>
+          <Link className="button" to="/signup">Sign up</Link>
         </section>
       </main>
 

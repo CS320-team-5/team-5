@@ -1,4 +1,4 @@
-import { type CartDetails } from "./types";
+import { type CartDetails } from '../../types/cart';
 
 /** Render the current cart data as cards. */
 export function CartList({ cartList }: { cartList: CartDetails[] }) {
@@ -54,15 +54,3 @@ export function CartList({ cartList }: { cartList: CartDetails[] }) {
   });
 }
 
-/**
- * Returns a JSX list of filters to be displayed as the filter list above the carts
- * on the dashboard
- * @param param0 An object containing a single member (filterList), an array of strings
- */
-export function FilterList({ filterList }: { filterList: string[] }) {
-  return filterList.map(filter => (
-    <button className="filter-button" type="button" key={filter}>
-      <span className="filter-text">{filter}</span>
-    </button>
-  ));
-}

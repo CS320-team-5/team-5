@@ -1,10 +1,17 @@
-import Dashboard from './faaiz-home-page/Dashboard.tsx'
+import { Route, Routes } from 'react-router'
+import DashboardPage from './pages/DashboardPage.tsx'
 import LandingPage from './pages/LandingPage.jsx'
+import SignUpPage from './pages/SignUpPage.jsx'
 
 function App() {
-  const pathname = window.location.pathname.replace(/\/+$/, '') || '/'
-
-  return pathname === '/dashboard' ? <Dashboard /> : <LandingPage />
+  return (
+    <Routes>
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/dashboard" element={<DashboardPage />} />
+      <Route path="/signup" element={<SignUpPage />} />
+      <Route path="*" element={<LandingPage />} />
+    </Routes>
+  )
 }
 
 export default App
