@@ -1,14 +1,17 @@
+import { Route, Routes } from 'react-router'
 import DashboardPage from './pages/DashboardPage.tsx'
 import LandingPage from './pages/LandingPage.jsx'
 import SignUpPage from './pages/SignUpPage.jsx'
 
 function App() {
-  const pathname = window.location.pathname.replace(/\/+$/, '') || '/'
-
-  if (pathname === '/dashboard') return <DashboardPage />
-  if (pathname === '/signup') return <SignUpPage />
-
-  return <LandingPage />
+  return (
+    <Routes>
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/dashboard" element={<DashboardPage />} />
+      <Route path="/signup" element={<SignUpPage />} />
+      <Route path="*" element={<LandingPage />} />
+    </Routes>
+  )
 }
 
 export default App

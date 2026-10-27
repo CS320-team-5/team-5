@@ -1,39 +1,46 @@
 import { renderToStaticMarkup } from 'react-dom/server'
-import { afterEach, expect, test, vi } from 'vitest'
+import { MemoryRouter } from 'react-router'
+import { expect, test } from 'vitest'
 import App from './App.jsx'
 
-afterEach(() => vi.unstubAllGlobals())
+const HOME = 'Meet the delivery minimum, together.'
+const DASH = 'Active Community Carts'
 
-test('keeps the landing page at the home URL and links to the dashboard', () => {
-  vi.stubGlobal('window', { location: { pathname: '/' } })
+//no browser here just render the app to an html string at a url
+//and check what's in it. fast, but it can't click anything
+function page(url) {
+  return renderToStaticMarkup(
+    <MemoryRouter initialEntries={[url]}>
+      <App />
+    </MemoryRouter>,
+  )
+}
 
-  const html = renderToStaticMarkup(<App />)
+test('home page shows the landing page + links to dashboard and signup', () => {
+  const html = page('/')
 
-  expect(html).toContain('Meet the delivery minimum, together.')
+  expect(html).toContain(HOME)
   expect(html).toContain('href="/dashboard"')
   expect(html).toContain('href="/signup"')
-  expect(html).not.toContain('Active Community Carts')
+  expect(html).not.toContain(DASH)
 })
 
-test.each(['/dashboard', '/dashboard/'])('renders the dashboard at %s with a link home', pathname => {
-  vi.stubGlobal('window', { location: { pathname } })
+//trailing slash should land on the same page
+test.each(['/dashboard', '/dashboard/'])('dashboard at %s, has a way back home', url => {
+  const html = page(url)
 
-  const html = renderToStaticMarkup(<App />)
-
-  expect(html).toContain('Active Community Carts')
+  expect(html).toContain(DASH)
   expect(html).toContain('aria-label="CoCart home"')
   expect(html).toContain('href="/"')
-  expect(html).not.toContain('Meet the delivery minimum, together.')
+  expect(html).not.toContain(HOME)
 })
 
-test.each(['/signup', '/signup/'])('renders the signup page at %s through the shared app', pathname => {
-  vi.stubGlobal('window', { location: { pathname } })
-
-  const html = renderToStaticMarkup(<App />)
+test.each(['/signup', '/signup/'])('signup at %s has the form', url => {
+  const html = page(url)
 
   expect(html).toContain('Create Account')
   expect(html).toContain('type="email"')
   expect(html).toContain('type="password"')
-  expect(html).not.toContain('Active Community Carts')
-  expect(html).not.toContain('Meet the delivery minimum, together.')
+  expect(html).not.toContain(DASH)
+  expect(html).not.toContain(HOME)
 })
