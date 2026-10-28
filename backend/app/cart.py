@@ -7,7 +7,7 @@ from pydantic import AwareDatetime, BaseModel, ConfigDict, Field
 from supabase import Client
 from datetime import datetime, timezone
 from .database import get_supabase
-from .auth import AuthSession, get_auth_session
+from .dependencies.auth import AuthSession, get_auth_session
 
 
 CartStatus = Literal["Active", "Inactive"]

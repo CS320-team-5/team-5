@@ -5,7 +5,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 import app.user as user_module
-from app.auth import get_auth_session
+from backend.app.dependencies.auth import get_auth_session
 from app.database import get_supabase
 from app.main import app
 

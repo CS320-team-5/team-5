@@ -1,6 +1,6 @@
 from fastapi import Depends, FastAPI
 
-from .auth import AuthSession, get_auth_session
+from .dependencies.auth import AuthSession, get_auth_session
 from .cart import router as cart_router
 from .user import router as user_router
 
