@@ -143,10 +143,16 @@
   font-weight: bold;
 }
 
+#create-cart-page #cart-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
 #store-input {
   font-family: "Plus Jakarta Sans";
 }
-#create-cart-page #store-input, .price-input {
+#create-cart-page #store-input, .price-input, #location-input {
   width: 100%;
   height: 44px;
   border: none;
@@ -160,11 +166,18 @@
   font-size: 18px;
 }
 
-#create-cart-page .general-container, #price-container, #notice-section {
+#create-cart-page #price-section, #location-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+#create-cart-page .general-container, #price-container, #notice-section, #safety-container {
   display: flex;
   flex-direction: row;
   align-items: center;
   width: 100%;
+  gap: 4px;
 }
 
 #price-container {
@@ -176,4 +189,6 @@
   border-radius: 8px;
   padding: 16px;
   gap: 8px;
+  font-weight: normal;
+  color: var(--secondary-green);
 }
