@@ -5,13 +5,12 @@ from httpx import RequestError
 from postgrest.exceptions import APIError
 from supabase import Client
 
-from ..dependencies.auth import AuthSession
 from ..models.user import UserPublic, UserUpdate
 from ..repositories import user as user_repository
 
 
 def _raise_database_error(error: APIError | RequestError) -> NoReturn:
-    """Translate known Supabase failures into existing API error responses."""
+    """Translate known Supabase failures into API error responses."""
 
     if isinstance(error, RequestError):
         raise HTTPException(
@@ -43,11 +42,11 @@ def _raise_database_error(error: APIError | RequestError) -> NoReturn:
     ) from error
 
 
-def get_user_profile(db: Client, user_id: int) -> UserPublic:
+def get_user(db: Client, user_id: int) -> UserPublic:
     """Read a public profile, returning 404 if it does not exist."""
 
     try:
-        row = user_repository.find_user(db, user_id)
+        row = user_repository.get_user(db, user_id)
     except (APIError, RequestError) as error:
         _raise_database_error(error)
 
@@ -57,19 +56,20 @@ def get_user_profile(db: Client, user_id: int) -> UserPublic:
     return UserPublic.model_validate(row)
 
 
-def update_current_user_profile(
-    session: AuthSession,
+def update_user(
+    db: Client,
+    user_id: int,
     body: UserUpdate,
 ) -> UserPublic:
-    """Only the signed-in user may change their own allowed profile fields."""
+    """Update permitted fields for the user ID supplied by the router."""
 
     changes = body.model_dump(exclude_unset=True)
 
     if not changes:
-        return get_user_profile(session.db, session.user_id)
+        return get_user(db, user_id)
 
     try:
-        row = user_repository.update_user(session.db, session.user_id, changes)
+        row = user_repository.update_user(db, user_id, changes)
     except (APIError, RequestError) as error:
         _raise_database_error(error)
 

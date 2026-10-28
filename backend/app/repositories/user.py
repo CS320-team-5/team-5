@@ -4,7 +4,7 @@ from supabase import Client
 PUBLIC_USER_COLUMNS = "userid,name,location"
 
 
-def find_user(db: Client, user_id: int) -> dict | None:
+def get_user(db: Client, user_id: int) -> dict | None:
     """Fetch a user's public profile fields from Supabase."""
 
     rows = (
