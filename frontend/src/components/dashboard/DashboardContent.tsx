@@ -16,7 +16,7 @@ export function DashboardContent({ cartList, filterList }: { cartList: CartDetai
         </Link>
         <nav id="center-banner-part" aria-label="Dashboard navigation">
           <Link className="banner-button" to="/dashboard" aria-current="page">Browse Carts</Link>
-          <button className="banner-button" type="button">Start a Cart</button>
+          <Link className="banner-button" to="/create" aria-current="page">Start a Cart</Link>
           <button className="banner-button" type="button">Messages</button>
         </nav>
         <div id="right-banner-part">
