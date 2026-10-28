@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Path, Response
 from supabase import Client
 
-from ..auth import AuthSession, get_auth_session
+from ..dependencies.auth import AuthSession, get_auth_session
 from ..database import get_supabase
 from ..models.store import Store, StoreCreate, StoreUpdate
 from ..services import store_service as service

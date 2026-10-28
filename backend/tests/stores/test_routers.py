@@ -5,7 +5,7 @@ import pytest
 from fastapi import FastAPI, HTTPException
 from fastapi.testclient import TestClient
 
-from app.auth import get_auth_session
+from app.dependencies.auth import get_auth_session
 from app.database import get_supabase
 from app.routers import store as store_router
 
