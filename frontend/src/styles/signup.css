@@ -154,6 +154,17 @@
   cursor: pointer;
 }
 
+.signup-page .password-reset-link {
+  text-align: center;
+  margin-top: 20px;
+  color: #64748b;
+}
+
+.signup-page .password-reset-link span {
+  color: #166534;
+  cursor: pointer;
+}
+
 .signup-page .signup-footer {
   text-align: center;
   padding: 24px;
