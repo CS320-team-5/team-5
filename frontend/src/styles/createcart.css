@@ -11,6 +11,13 @@
   color: var(--general-text-color);
 }
 
+#create-cart-page #diff-text {
+  font-family: "Outfit", sans-serif;
+  font-size: 18px;
+  color: var(--primary-green);
+  font-weight: bold;
+}
+
 #create-cart-page {
   background-color: #F8F9FF;
   min-height: 100vh;

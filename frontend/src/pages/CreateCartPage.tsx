@@ -12,6 +12,23 @@ export function CreateCartPage() {
   const md = 
     `${d.getFullYear()}-${format(d.getMonth()+1)}-${format(d.getDate())}T${format(d.getHours())}:${format(d.getMinutes())}`;
 
+  const [priceValues, setPriceValues] = useState({ targetMin: 0, initValue: 0 });
+
+  const handleTargetChange: React.ChangeEventHandler<HTMLInputElement> =
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const result = e.currentTarget.value.replaceAll(/\D/g, '');
+      const newValue = Number(result);
+      if (!Number.isNaN(newValue))
+        setPriceValues(priceValues => ({...priceValues, targetMin: newValue }));
+    };
+
+  const handleInitChange: React.ChangeEventHandler<HTMLInputElement> =
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const result = e.currentTarget.value.replaceAll(/\D/g, '');
+      const newValue = Number(result);
+      if (!Number.isNaN(newValue))
+        setPriceValues(priceValues => ({...priceValues, initValue: newValue }));
+    };
 
   return (
     <main id="create-cart-page">
@@ -55,9 +72,10 @@ export function CreateCartPage() {
                     <div className="general-container">
                       <span className="price-text">$</span>
                       <input 
-                        type="number" name="threshold" 
-                        id="threshold" placeholder="50.00" pattern="[0-9]+(\.[0-9][0-9]?)?"
-                        className="price-input" required onChange={handlePriceChange}
+                        type="text" inputMode="numeric" name="target_min"
+                        value={priceValues.targetMin} placeholder="0.00"
+                        id="threshold" pattern="[0-9]+(\.[0-9][0-9]?)?"
+                        className="price-input" required onChange={handleTargetChange}
                       />
                     </div>
                   </div>
@@ -67,8 +85,9 @@ export function CreateCartPage() {
                       <span className="price-text">$</span>
                       <input 
                         type="text" inputMode="numeric" name="start_amount" 
-                        id="start_amount" placeholder="0.00" pattern="[0-9]+(\.[0-9][0-9]?)?"
-                        className="price-input" required onChange={handlePriceChange}
+                        value={priceValues.initValue} placeholder="0.00"
+                        id="start_amount" pattern="[0-9]+(\.[0-9][0-9]?)?"
+                        className="price-input" required onChange={handleInitChange}
                       />
                     </div>
                   </div>
@@ -76,7 +95,7 @@ export function CreateCartPage() {
                 <div id="notice-section">
                   <span><img src="/piggy_bank.svg" /></span>
                   <div className="general-text">
-                    Future cart participants need to add $20 to unlock free delivery
+                    Future cart participants need to add <span id="diff-text">${priceValues.targetMin - priceValues.initValue}</span> to unlock free delivery
                   </div>
                 </div>
               </div>
