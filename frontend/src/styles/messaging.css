@@ -249,7 +249,7 @@
 
 .messaging-page .group-chat {
   align-self: stretch;
-  min-height: 700px;
+  height: 700px;
 }
 
 .messaging-page .chat-heading {
