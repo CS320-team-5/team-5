@@ -9,7 +9,7 @@ function LandingPage() {
         <nav aria-label="Main navigation">
           <a href="#how-it-works">How it works</a>
           <Link to="/dashboard">Browse carts</Link>
-          <button className="button button-outline" type="button">Log in</button>
+          <Link className="button" to="/login">Log in</Link>
           <Link className="button" to="/signup">Sign up</Link>
         </nav>
       </header>
