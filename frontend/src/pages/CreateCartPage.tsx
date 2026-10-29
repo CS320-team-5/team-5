@@ -12,6 +12,7 @@ export function CreateCartPage() {
   const md = 
     `${d.getFullYear()}-${format(d.getMonth()+1)}-${format(d.getDate())}T${format(d.getHours())}:${format(d.getMinutes())}`;
 
+
   return (
     <main id="create-cart-page">
       <header id="banner">
@@ -55,8 +56,8 @@ export function CreateCartPage() {
                       <span className="price-text">$</span>
                       <input 
                         type="number" name="threshold" 
-                        id="threshold" readOnly placeholder="50"
-                        className="price-input"
+                        id="threshold" placeholder="50.00" pattern="[0-9]+(\.[0-9][0-9]?)?"
+                        className="price-input" required onChange={handlePriceChange}
                       />
                     </div>
                   </div>
@@ -67,7 +68,7 @@ export function CreateCartPage() {
                       <input 
                         type="text" inputMode="numeric" name="start_amount" 
                         id="start_amount" placeholder="0.00" pattern="[0-9]+(\.[0-9][0-9]?)?"
-                        className="price-input" required
+                        className="price-input" required onChange={handlePriceChange}
                       />
                     </div>
                   </div>
