@@ -1,12 +1,27 @@
+<<<<<<< HEAD:frontend/src/styles/landing.css
 .landing-page main {
   text-align: center;
 }
 
 .landing-page h1 {
+=======
+main {
+  text-align: center;
+}
+
+h1 {
+>>>>>>> 796297f05d07e42f3b1f9ed94008c8fe89b20028:frontend/src/App.css
   margin: 0;
   font-size: 2.5rem;
 }
 
+<<<<<<< HEAD:frontend/src/styles/landing.css
+=======
+p {
+  margin: 0.75rem 0 0;
+  color: #4b5563;
+}
+>>>>>>> 796297f05d07e42f3b1f9ed94008c8fe89b20028:frontend/src/App.css
 .landing-page {
   max-width: 960px;
   margin: 0 auto;
