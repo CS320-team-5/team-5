@@ -8,7 +8,7 @@ export function DashboardContent({ cartList, filterList }: { cartList: CartDetai
     <>
       <header id="banner">
         <Link id="left-banner-part" to="/" aria-label="CoCart home">
-          <img src="../../public/hero_logo.svg" />
+          <img src="/hero_logo.svg" />
           <span id="logo-title">Co-Cart</span>
         </Link>
         <nav id="center-banner-part" aria-label="Dashboard navigation">
