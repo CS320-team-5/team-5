@@ -9,11 +9,10 @@ export function CreateCartPage() {
   // getFullYear because getYear is deprecated
   // getMonth+1 because getMonth is 0-based
   // getDate because getDay gets you the DAY OF THE WEEK
-  const md = 
-    `${d.getFullYear()}-${format(d.getMonth()+1)}-${format(d.getDate())}T${format(d.getHours())}:${format(d.getMinutes())}`;
+
+  //const navigate = useNavigate();
 
   const [priceValues, setPriceValues] = useState({ targetMin: 0, initValue: 0 });
-
   const handleTargetChange: React.ChangeEventHandler<HTMLInputElement> =
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const result = e.currentTarget.value.replaceAll(/\D/g, '');
@@ -21,13 +20,36 @@ export function CreateCartPage() {
       if (!Number.isNaN(newValue))
         setPriceValues(priceValues => ({...priceValues, targetMin: newValue }));
     };
-
   const handleInitChange: React.ChangeEventHandler<HTMLInputElement> =
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const result = e.currentTarget.value.replaceAll(/\D/g, '');
       const newValue = Number(result);
       if (!Number.isNaN(newValue))
         setPriceValues(priceValues => ({...priceValues, initValue: newValue }));
+    };
+
+  const handleFormSubmit: React.SubmitEventHandler<HTMLFormElement> =
+    (e: React.SubmitEvent<HTMLFormElement>) => {
+      e.preventDefault();
+
+      const form = e.currentTarget as HTMLFormElement;
+      const formData = new FormData(form);
+
+      const deadline_input = formData.get("deadline-input");
+      if (deadline_input) {
+        const deadline = new Date(deadline_input.toString());
+        const currentDate = new Date();
+
+        if (deadline <= currentDate)
+          alert(`Please enter a date after the current time: ${currentDate.toDateString()}, ${currentDate.toTimeString()}`);
+        else {
+          console.log("received!");
+        }
+          // here, we are fine
+          // some sort of post over here to send data to backend
+        
+      }
+      
     };
 
   return (
@@ -56,7 +78,7 @@ export function CreateCartPage() {
             <div className="general-text">Set up a shared order so neighbors can add to your cart.</div>
           </div>
           <div>
-            <form action="" method="get" id="cart-form">
+            <form action="" method="get" id="cart-form" onSubmit={handleFormSubmit}>
               <div className="form-text">
                 <label htmlFor="store">1. Store or Restaurant</label>
                 <input 
@@ -126,7 +148,7 @@ export function CreateCartPage() {
                 <label htmlFor="deadline-input" className="form-text">4. Deadline</label>
                 <input 
                   type="datetime-local" id="deadline-input" name="deadline-input"
-                  min={md} placeholder={md}
+                  required
                 />
               </div>
               <div id="notes-section">
