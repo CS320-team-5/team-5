@@ -212,6 +212,10 @@
   border-radius: 8px;
   color: white;
   background-color: var(--primary-green);
+  border: none;
+}
+#create-cart-page #submitBtn:hover {
+  background-color: var(--secondary-green);
 }
 
 #create-cart-page footer {
