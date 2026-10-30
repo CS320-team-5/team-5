@@ -5,7 +5,7 @@ from postgrest.exceptions import APIError
 from supabase import Client
 from supabase_auth.errors import AuthApiError
 
-from .database import get_supabase, get_user_supabase
+from ..database import get_supabase, get_user_supabase
 
 
 @dataclass(frozen=True)
