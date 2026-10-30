@@ -43,9 +43,27 @@ test('back button goes to the previous page', async () => {
 
 test.each([
   ['/dashboard', 'Active Community Carts'],
+  ['/messages', "Trader Joe's Cart · Main Building Lobby"],
   ['/signup', 'Create Account'],
 ])('loading %s directly shows the right page', (url, expected) => {
   window.history.replaceState(null, '', url)
   renderApp()
   expect(screen.getByRole('heading', { name: expected })).toBeTruthy()
+})
+
+test('dashboard messages link opens a chat that can send messages', async () => {
+  const user = userEvent.setup()
+  window.history.replaceState(null, '', '/dashboard')
+  renderApp()
+
+  await user.click(screen.getByRole('link', { name: 'Messages' }))
+  expect(window.location.pathname).toBe('/messages')
+  expect(screen.getByRole('button', { name: 'Send' }).disabled).toBe(true)
+
+  await user.type(screen.getByRole('textbox', { name: 'Message' }), '  Heading down!  {Enter}')
+  expect(screen.getByRole('log').textContent).toContain('Heading down!')
+  expect(screen.getByRole('textbox', { name: 'Message' }).value).toBe('')
+
+  await user.click(screen.getByRole('button', { name: 'Sent Venmo ✓' }))
+  expect(screen.getByRole('log').textContent).toContain('Sent Venmo ✓')
 })
