@@ -2,8 +2,10 @@ import { Link } from "react-router";
 import '../styles/createcart.css';
 import { useState } from "react";
 
+type CEFunc = React.ChangeEventHandler;
+type CEvent = React.ChangeEvent;
+
 export function CreateCartPage() {
-  const d = new Date();
   /** Simply accepts a number, turns it into a string, and pads the start with 0s */
   const format = (n: number): string => n.toString().padStart(2, '0');
   // getFullYear because getYear is deprecated
@@ -13,6 +15,11 @@ export function CreateCartPage() {
   //const navigate = useNavigate();
 
   const [priceValues, setPriceValues] = useState({ targetMin: 0, initValue: 0 });
+  const [formData, setFormData] = useState({});
+  const handleStoreChange: React.ChangeEventHandler<HTMLInputElement> =
+    (e: React.ChangeEvent<HTMLInputElement>) =>
+      setFormData(formData => ({...formData, store: e.currentTarget }))
+
   const handleTargetChange: React.ChangeEventHandler<HTMLInputElement> =
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const result = e.currentTarget.value.replaceAll(/\D/g, '');
@@ -28,21 +35,18 @@ export function CreateCartPage() {
         setPriceValues(priceValues => ({...priceValues, initValue: newValue }));
     };
 
-  const handleFormSubmit: React.SubmitEventHandler<HTMLFormElement> =
-    (e: React.SubmitEvent<HTMLFormElement>) => {
-      e.preventDefault();
+  const handleDateChange: React.ChangeEventHandler<HTMLInputElement> =
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const deadlineInput = new Date(e.currentTarget.value);
+      console.log(`deadline input: ${deadlineInput}`);
 
-      const form = e.currentTarget as HTMLFormElement;
-      const formData = new FormData(form);
-
-      const deadline_input = formData.get("deadline-input");
-      if (deadline_input) {
-        const deadline = new Date(deadline_input.toString());
+      if (deadlineInput) {
         const currentDate = new Date();
 
-        if (deadline <= currentDate)
+        if (deadlineInput <= currentDate) {
           alert(`Please enter a date after the current time: ${currentDate.toDateString()}, ${currentDate.toTimeString()}`);
-        else {
+          console.log(`bad -- ${deadlineInput} < ${currentDate}`);
+        } else {
           console.log("received!");
         }
           // here, we are fine
@@ -78,7 +82,7 @@ export function CreateCartPage() {
             <div className="general-text">Set up a shared order so neighbors can add to your cart.</div>
           </div>
           <div>
-            <form action="" method="get" id="cart-form" onSubmit={handleFormSubmit}>
+            <form action="" method="get" id="cart-form">
               <div className="form-text">
                 <label htmlFor="store">1. Store or Restaurant</label>
                 <input 
@@ -117,7 +121,7 @@ export function CreateCartPage() {
                 <div id="notice-section">
                   <span><img src="/piggy_bank.svg" /></span>
                   <div className="general-text">
-                    Future cart participants need to add <span id="diff-text">${priceValues.targetMin - priceValues.initValue}</span> to unlock free delivery
+                    Other cart participants need to add<span id="diff-text"> ${priceValues.targetMin - priceValues.initValue} </span>to unlock free delivery
                   </div>
                 </div>
               </div>
@@ -148,7 +152,7 @@ export function CreateCartPage() {
                 <label htmlFor="deadline-input" className="form-text">4. Deadline</label>
                 <input 
                   type="datetime-local" id="deadline-input" name="deadline-input"
-                  required
+                  required onChange={handleDateChange}
                 />
               </div>
               <div id="notes-section">
