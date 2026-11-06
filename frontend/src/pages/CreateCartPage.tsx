@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import '../styles/createcart.css';
 import { useEffect, useState } from "react";
 import { createCart } from "../services/cart";
+import { createStore, type StoreInput } from "../services/store";
 
 type StoreOption = {
   storeid: number;
@@ -70,7 +71,7 @@ export function CreateCartPage() {
         setSubmitError("The minimum amount must be greater than zero.");
         return;
       }
-      
+
       if (
         !startingAmount.trim() ||
         !Number.isFinite(Number(startingAmount)) ||
@@ -107,20 +108,24 @@ export function CreateCartPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const [submitSuccess, setSubmitSuccess] = useState("");
-
+  const [storeName, setStoreName] = useState("");
+  const [selectedStoreId, setSelectedStoreId] = useState<number | null>(null);
+  const [newStoreType, setNewStoreType] = useState<StoreInput["storetype"]>("restaurant");
+  const [newStoreAddress, setNewStoreAddress] = useState("");
+  const [newStoreMinimum, setNewStoreMinimum] = useState("");
+  const [isAddingStore, setIsAddingStore] = useState(false);
+  const [addStoreError, setAddStoreError] = useState("");
+  const [showNewStore, setShowNewStore] = useState(false);
   useEffect(() => {
     const controller = new AbortController();
-
     async function loadStores() {
       try {
         const response = await fetch("/api/store", {
           signal: controller.signal,
         });
-
         if (!response.ok) {
           throw new Error("Could not load stores.");
         }
-
         const data: StoreOption[] = await response.json();
         setStores(data);
       } catch (error) {
@@ -135,10 +140,47 @@ export function CreateCartPage() {
         }
       }
     }
-
     loadStores();
     return () => controller.abort();
   }, []);
+  async function handleAddStore() {
+    if (isAddingStore) return;
+    setAddStoreError("");
+    const name = storeName.trim();
+    const minimum = newStoreMinimum.trim();
+    if (!name || name.length > 20) {
+      setAddStoreError("Enter a store name between 1 and 20 characters.");
+      return;
+    }
+    if (
+      !/^\d+([.]\d{1,2})?$/.test(minimum) ||
+      Number(minimum) > 99999999.99
+    ) {
+      setAddStoreError("Enter a valid delivery minimum, such as 0 or 30.00.");
+      return;
+    }
+    setIsAddingStore(true);
+    try {
+      const store = await createStore({
+        enterprisename: name,
+        storetype: newStoreType,
+        address: newStoreAddress.trim() || null,
+        minimumorderamount: minimum,
+      });
+      setStores((previous) => [...previous, store]);
+      setStoreName(store.enterprisename);
+      setSelectedStoreId(store.storeid);
+      setShowNewStore(false);
+    } catch (error) {
+      setAddStoreError(
+        error instanceof Error ? error.message : "Could not add the store."
+      );
+    } finally {
+      setIsAddingStore(false);
+    }
+  }
+const storeSearch = storeName.trim().toLowerCase();
+const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.enterprisename.toLowerCase().includes(storeSearch)).slice(0, 5) : [];
   return (
     <main id="create-cart-page">
       <header id="banner">
@@ -168,28 +210,110 @@ export function CreateCartPage() {
             <form action="" method="get" id="cart-form" onSubmit={handleFormSubmit}>
               <div className="form-text">
                 <label htmlFor="store-input">1. Store or Restaurant</label>
-                <select
+                  <input
+                    type="text"
+                    id="store-input"
+                    name="store-name"
+                    value={storeName}
+                    maxLength={20}
+                    placeholder="Search or enter a store name"
+                    required
+                    disabled={isAddingStore}
+                    onChange={(event) => {
+                      setStoreName(event.target.value);
+                      setSelectedStoreId(null);
+                      setAddStoreError("");
+                      setShowNewStore(false);
+                    }}
+                  />
+                {/* The existing cart submission reads this selected store ID. */}
+                <input
+                  type="hidden"
                   name="store"
-                  id="store-input"
-                  defaultValue=""
-                  required
-                  disabled={storesLoading || stores.length === 0}
-                >
-                  <option value="" disabled>
-                    {storesLoading
-                      ? "Loading stores..."
-                      : stores.length === 0
-                        ? "No stores available"
-                        : "Select a store"}
-                  </option>
-
-                  {stores.map((store) => (
-                    <option key={store.storeid} value={store.storeid}>
-                      {store.enterprisename}
-                    </option>
-                  ))}
-                </select>
+                  value={selectedStoreId ?? ""}
+                />
+                {storesLoading && <p role="status">Loading store suggestions...</p>}
                 {storeError && <p role="alert">{storeError}</p>}
+                {selectedStoreId === null && storeName.trim() && (
+                  <div aria-label="Matching stores" className="store-suggestions">
+                    {matchingStores.map((store) => (
+                      <button
+                        key={store.storeid}
+                        type="button"
+                        onClick={() => {
+                          setStoreName(store.enterprisename);
+                          setSelectedStoreId(store.storeid);
+                          setShowNewStore(false);
+                        }}
+                      >
+                        {store.enterprisename}
+                      </button>
+                    ))}
+                    {!storesLoading && storeSearch.length >= 2 && matchingStores.length === 0 && !storeError && (
+                      <p>This store is not listed yet.</p>
+                    )}
+                  </div>
+                )}
+                    {selectedStoreId === null && storeName.trim() && (
+                      <button className="store-toggle" type="button" disabled={isAddingStore}
+                        aria-expanded={showNewStore} onClick={() => {
+                          setShowNewStore((previous) => !previous);
+                          setAddStoreError("");
+                        }}
+                      >
+                        {showNewStore ? "Cancel adding store" : "Add a new store"}
+                      </button>
+                    )}
+                    {selectedStoreId === null && showNewStore && storeName.trim() && (
+                      <div className="new-store-panel">
+                        <p>Enter the new store’s details below.</p>
+                      <label htmlFor="new-store-type">Store category</label>
+                      <select
+                        id="new-store-type"
+                        value={newStoreType}
+                        onChange={(event) =>
+                          setNewStoreType(event.target.value as StoreInput["storetype"])
+                        }
+                      >
+                        <option value="restaurant">Restaurant</option>
+                        <option value="groceries">Groceries</option>
+                        <option value="electronics">Electronics</option>
+                        <option value="etc">Other</option>
+                      </select>
+                      <label htmlFor="new-store-address">
+                        Store address (optional for online stores)
+                      </label>
+                      <input
+                        id="new-store-address"
+                        type="text"
+                        maxLength={30}
+                        value={newStoreAddress}
+                        onChange={(event) => setNewStoreAddress(event.target.value)}
+                      />
+                      <label htmlFor="new-store-minimum">
+                        Store delivery minimum ($)
+                      </label>
+                      <input
+                        id="new-store-minimum"
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        value={newStoreMinimum}
+                        onChange={(event) => setNewStoreMinimum(event.target.value)}
+                      />
+                      {addStoreError && <p role="alert">{addStoreError}</p>}
+                      <button
+                        type="button"
+                        onClick={handleAddStore}
+                        disabled={isAddingStore}
+                      >
+                        {isAddingStore ? "Adding store..." : "Add this store"}
+                      </button>
+                    </div>
+                  )}
+                {selectedStoreId !== null && (
+                  <p role="status">Store selected: {storeName}</p>
+                )}
               </div>
               <div className="form-text" id="price-section">
                 2. Order Minimum & Your Share
@@ -263,7 +387,7 @@ export function CreateCartPage() {
                   placeholder="e.g. Ordering one large pizza, will text when courier arrives"
                 />
               </div>{submitError && <p role="alert">{submitError}</p>}{submitSuccess && <p role="status">{submitSuccess}</p>}
-              <button id="submitBtn" type="submit" disabled={isSubmitting || storesLoading || stores.length === 0}>
+              <button id="submitBtn" type="submit" disabled={isSubmitting || selectedStoreId === null}>
                 {isSubmitting ? "Creating cart..." : "Create Cart"}
               </button>
             </form>

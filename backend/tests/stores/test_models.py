@@ -19,8 +19,11 @@ def test_create_accepts_valid_fields():
     assert store.minimumorderamount == Decimal("10.50")
 
 
-@pytest.mark.parametrize("missing", list(VALID))
-def test_create_requires_every_field(missing):
+@pytest.mark.parametrize(
+    "missing",
+    ["enterprisename", "storetype", "minimumorderamount"],
+)
+def test_create_requires_required_fields(missing):
     values = {key: value for key, value in VALID.items() if key != missing}
     with pytest.raises(ValidationError):
         StoreCreate(**values)
@@ -75,3 +78,11 @@ def test_store_rejects_nonpositive_ids(store_id):
 
 def test_store_accepts_positive_id():
     assert Store(**VALID, storeid=8).storeid == 8
+
+# Online stores can be created without a physical address.
+def test_create_allows_missing_address():
+    values = {key: value for key, value in VALID.items()
+        if key != "address"
+    }
+    store = StoreCreate(**values)
+    assert store.address is None

@@ -41,7 +41,7 @@ def test_post_returns_201(setup):
 @pytest.mark.parametrize("body", [
     {**BODY, "enterprisename": ""},
     {**BODY, "minimumorderamount": -1},
-    {k: v for k, v in BODY.items() if k != "address"},
+    {k: v for k, v in BODY.items() if k != "storetype"},
     {**BODY, "unexpected": True},
 ])
 def test_post_bad_payload_returns_422(setup, body):
@@ -114,3 +114,16 @@ def test_delete_missing_returns_404(setup):
     client, service, _ = setup
     service.delete_store.side_effect = HTTPException(404, "missing")
     assert client.delete("/api/store/9").status_code == 404
+
+# The endpoint accepts an online store without an address.
+def test_post_without_address_returns_201(setup):
+    client, service, db = setup
+    body = {key: value for key, value in BODY.items() if key != "address"}
+    service.create_store.return_value = {**ROW, "address": None,}
+    response = client.post("/api/store", json=body)
+    assert response.status_code == 201
+    assert response.json()["address"] is None
+    service.create_store.assert_called_once()
+    arguments = service.create_store.call_args.args
+    assert arguments[0] is db
+    assert arguments[1].address is None
