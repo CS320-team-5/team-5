@@ -5,7 +5,7 @@
   --general-text-color: #3D4A42; /* for any other text */
 }
 
-#create-cart-page, #create-cart-page .general-text {
+#create-cart-page, #create-cart-page .general-text, .error-text {
   font-family: "Plus Jakarta Sans", sans-serif;
   font-size: 14px;
   color: var(--general-text-color);
@@ -216,6 +216,11 @@
 }
 #create-cart-page #submitBtn:hover {
   background-color: var(--secondary-green);
+}
+
+#create-cart-page .error-text {
+  color: #B5260B;
+  font-weight: bold;
 }
 
 #create-cart-page footer {

@@ -15,11 +15,32 @@ export function CreateCartPage() {
   //const navigate = useNavigate();
 
   const [priceValues, setPriceValues] = useState({ targetMin: 0, initValue: 0 });
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    // store: string
+    // target: number
+    // init: number
+    // location: string
+    // deadline: Date, or maybe string
+    // notes: string
+  });
+
+  const [formErrors, setFormError] = useState({
+    noStore: true,
+    targetBelowInit: false,
+    noLocation: true,
+    badDeadline: false,
+  });
+
+  /**
+   * Handles a change to the store result
+   */
   const handleStoreChange: React.ChangeEventHandler<HTMLInputElement> =
     (e: React.ChangeEvent<HTMLInputElement>) =>
-      setFormData(formData => ({...formData, store: e.currentTarget }))
+      setFormData(formData => ({...formData, store: e.currentTarget }));
 
+  /**
+   * Handle change to the provided target value
+   */
   const handleTargetChange: React.ChangeEventHandler<HTMLInputElement> =
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const result = e.currentTarget.value.replaceAll(/\D/g, '');
@@ -27,6 +48,10 @@ export function CreateCartPage() {
       if (!Number.isNaN(newValue))
         setPriceValues(priceValues => ({...priceValues, targetMin: newValue }));
     };
+
+  /**
+   * Handle change to the initial value provided
+   */
   const handleInitChange: React.ChangeEventHandler<HTMLInputElement> =
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const result = e.currentTarget.value.replaceAll(/\D/g, '');
@@ -37,6 +62,7 @@ export function CreateCartPage() {
 
   const handleDateChange: React.ChangeEventHandler<HTMLInputElement> =
     (e: React.ChangeEvent<HTMLInputElement>) => {
+      e.preventDefault();
       const deadlineInput = new Date(e.currentTarget.value);
       console.log(`deadline input: ${deadlineInput}`);
 
@@ -44,10 +70,12 @@ export function CreateCartPage() {
         const currentDate = new Date();
 
         if (deadlineInput <= currentDate) {
-          alert(`Please enter a date after the current time: ${currentDate.toDateString()}, ${currentDate.toTimeString()}`);
+          setFormError(formErrors => ({...formErrors, badDeadline: true }));
+          //alert(`Please enter a date after the current time: ${currentDate.toDateString()}, ${currentDate.toTimeString()}`);
           console.log(`bad -- ${deadlineInput} < ${currentDate}`);
         } else {
           console.log("received!");
+          setFormError(formErrors => ({...formErrors, badDeadline: false }));
         }
           // here, we are fine
           // some sort of post over here to send data to backend
@@ -154,6 +182,9 @@ export function CreateCartPage() {
                   type="datetime-local" id="deadline-input" name="deadline-input"
                   required onChange={handleDateChange}
                 />
+                <p className="error-text" style={{ display: formErrors.badDeadline ? "block" : "none"}}>
+                  Please enter a valid deadline (after current date)
+                </p>
               </div>
               <div id="notes-section">
                 <label htmlFor="notes-input" className="form-text">5. Notes (Optional)</label>

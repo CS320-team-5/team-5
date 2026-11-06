@@ -37,7 +37,8 @@ export function DashboardContent({ cartList, filterList }: { cartList: CartDetai
             <div id="summary-text">
               Find a nearby group order to hit free delivery minimums and split costs.
             </div>
-            <button id="start-cart-button" type="button">+ Start a Cart</button>
+            
+            <Link id="start-cart-button" to="/create" aria-label="Create a Cart">+ Start a Cart</Link>
           </div>
         </div>
         <br />
