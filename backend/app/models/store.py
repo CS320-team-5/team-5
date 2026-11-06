@@ -9,7 +9,11 @@ class StoreCreate(BaseModel):
 
     enterprisename: str = Field(min_length=1)
     storetype: str = Field(min_length=1)
-    address: str = Field(min_length=1)
+    address: str | None = Field(
+    default=None,
+    min_length=1,
+    max_length=30,
+    )
     minimumorderamount: Decimal = Field(ge=0)
 
 

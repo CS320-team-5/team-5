@@ -6,6 +6,7 @@ from .routers.user import router as user_router
 from .routers.cartparticipant import router as participant_router
 from .routers.message import router as message_router
 
+from .routers.store import router as store_router
 
 app = FastAPI()
 
@@ -13,7 +14,7 @@ app.include_router(cart_router)
 app.include_router(user_router)
 app.include_router(participant_router)
 app.include_router(message_router)
-
+app.include_router(store_router)
 
 @app.get("/")
 def read_root():

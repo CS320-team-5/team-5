@@ -2,7 +2,7 @@ from types import SimpleNamespace
 
 import pytest
 from fastapi import HTTPException
-
+from decimal import Decimal
 from app.services.cart import check_owner
 from datetime import datetime, timedelta, timezone
 from postgrest.exceptions import APIError
@@ -23,25 +23,24 @@ def test_other_user_cannot_edit_cart():
         check_owner(cart, user_id=2)
     assert error.value.status_code == 403
 
-# Checks that the signed-in user becomes the cart owner and no cart ID is supplied.
-def test_create_cart_uses_session_owner(cart_row, session):
-    row = {**cart_row, "owneruserid": 7}
+# Checks that creation uses the database function without sending an owner ID.
+def test_create_cart_calls_owner_function(cart_row, session):
+    row = {**cart_row,"owneruserid": 7,"currentamount": "10.50",
+    }
     session.user_id = 7
-    query = session.db.table.return_value
-    query.execute.return_value.data = [row]
+    session.db.rpc.return_value.execute.return_value.data = [row]
     result = cart_service.create_cart(
-        body=CartCreate(
-            storeid=1,
-            location="Amherst",
-            deadline="2026-12-01T18:00:00-05:00",
-            minimumamount="25.00",
+        body=CartCreate(storeid=1,location="Amherst",deadline="2026-12-01T18:00:00-05:00",minimumamount="25.00",owneramount="10.50",
         ),
         session=session,
     )
-    values = query.insert.call_args.args[0]
-    assert values["owneruserid"] == 7
-    assert "cartid" not in values
+    session.db.rpc.assert_called_once_with(
+        "create_cart_with_owner",
+        {"p_storeid": 1,"p_location": "Amherst","p_deadline": "2026-12-01T18:00:00-05:00","p_minimumamount": "25.00","p_owner_amount": "10.50", "p_notes": None,},
+    )
+    session.db.table.assert_not_called()
     assert result.owneruserid == 7
+    assert result.currentamount == Decimal("10.50")
 
 # Checks that another user cannot update or delete the cart, and no database call is made.
 @pytest.mark.parametrize("action", ["update", "delete"])

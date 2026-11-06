@@ -40,9 +40,9 @@ def has_other_participant_records(db: Client, cart: Cart) -> bool:
 
 def insert_cart(db: Client, values: dict):
     return execute_query(
-        db.table("cart")
-        .insert(values)
-        .select("*")
+        db.rpc("create_cart_with_owner",{"p_storeid": values["storeid"], "p_location": values.get("location"),
+                "p_deadline": values["deadline"], "p_minimumamount": values["minimumamount"], "p_notes": values.get("notes"),
+                 "p_owner_amount": values.get("owneramount", "0.00"),},)
     )
 
 def get_cart_history(db: Client, user_id: int, now: str):

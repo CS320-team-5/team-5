@@ -1,6 +1,13 @@
 import { Link } from "react-router";
 import '../styles/createcart.css';
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { createCart } from "../services/cart";
+import { createStore, type StoreInput } from "../services/store";
+
+type StoreOption = {
+  storeid: number;
+  enterprisename: string;
+};
 
 export function CreateCartPage() {
   const d = new Date();
@@ -12,46 +19,168 @@ export function CreateCartPage() {
 
   //const navigate = useNavigate();
 
-  const [priceValues, setPriceValues] = useState({ targetMin: 0, initValue: 0 });
-  const handleTargetChange: React.ChangeEventHandler<HTMLInputElement> =
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const result = e.currentTarget.value.replaceAll(/\D/g, '');
-      const newValue = Number(result);
-      if (!Number.isNaN(newValue))
-        setPriceValues(priceValues => ({...priceValues, targetMin: newValue }));
-    };
-  const handleInitChange: React.ChangeEventHandler<HTMLInputElement> =
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const result = e.currentTarget.value.replaceAll(/\D/g, '');
-      const newValue = Number(result);
-      if (!Number.isNaN(newValue))
-        setPriceValues(priceValues => ({...priceValues, initValue: newValue }));
-    };
-
+  const [priceValues, setPriceValues] = useState({
+    targetMin: "",
+    initValue: "",
+  });
+  const handleTargetChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    const value = e.currentTarget.value;
+    if (/^\d*(\.\d{0,2})?$/.test(value)) {
+      setPriceValues((previous) => ({ ...previous, targetMin: value }));
+    }
+  };
+  const handleInitChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    const value = e.currentTarget.value;
+    if (/^\d*(\.\d{0,2})?$/.test(value)) {
+      setPriceValues((previous) => ({ ...previous, initValue: value }));
+    }
+  };
   const handleFormSubmit: React.SubmitEventHandler<HTMLFormElement> =
-    (e: React.SubmitEvent<HTMLFormElement>) => {
+    async (e) => {
       e.preventDefault();
+      if (isSubmitting) return;
+      setSubmitError("");
+      setSubmitSuccess("");
+      const formData = new FormData(e.currentTarget);
+      const storeid = Number(formData.get("store"));
+      const location = String(formData.get("location-input") ?? "").trim();
+      const deadline = new Date(
+        String(formData.get("deadline-input") ?? "")
+      );
+      const minimumamount = String(formData.get("target_min") ?? "");
+      const startingAmount = String(formData.get("start_amount") ?? "");
+      const notes = String(formData.get("notes-input") ?? "").trim();
 
-      const form = e.currentTarget as HTMLFormElement;
-      const formData = new FormData(form);
-
-      const deadline_input = formData.get("deadline-input");
-      if (deadline_input) {
-        const deadline = new Date(deadline_input.toString());
-        const currentDate = new Date();
-
-        if (deadline <= currentDate)
-          alert(`Please enter a date after the current time: ${currentDate.toDateString()}, ${currentDate.toTimeString()}`);
-        else {
-          console.log("received!");
-        }
-          // here, we are fine
-          // some sort of post over here to send data to backend
-        
+      if (!Number.isInteger(storeid) || storeid <= 0) {
+        setSubmitError("Please select a store.");
+        return;
       }
-      
-    };
+      if (!location || location.length > 30) {
+        setSubmitError("Enter a location between 1 and 30 characters.");
+        return;
+      }
+      if (
+        Number.isNaN(deadline.getTime()) ||
+        deadline <= new Date()
+      ) {
+        setSubmitError("Please choose a future deadline.");
+        return;
+      }
+      if (!Number.isFinite(Number(minimumamount)) ||
+          Number(minimumamount) <= 0) {
+        setSubmitError("The minimum amount must be greater than zero.");
+        return;
+      }
 
+      if (
+        !startingAmount.trim() ||
+        !Number.isFinite(Number(startingAmount)) ||
+        Number(startingAmount) < 0
+      ) {
+        setSubmitError("Your planned amount must be zero or greater.");
+        return;
+      }
+
+      setIsSubmitting(true);
+      try {
+        const cart = await createCart({
+          storeid,
+          location,
+          deadline: deadline.toISOString(),
+          minimumamount,
+          owneramount: startingAmount,
+          notes: notes || null,
+        });
+        setSubmitSuccess(`Cart ${cart.cartid} created successfully.`);
+      } catch (error) {
+        setSubmitError(
+          error instanceof Error
+            ? error.message
+            : "Could not create the cart."
+        );
+      } finally {
+        setIsSubmitting(false);
+      }
+    };
+  const [stores, setStores] = useState<StoreOption[]>([]);
+  const [storesLoading, setStoresLoading] = useState(true);
+  const [storeError, setStoreError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const [submitSuccess, setSubmitSuccess] = useState("");
+  const [storeName, setStoreName] = useState("");
+  const [selectedStoreId, setSelectedStoreId] = useState<number | null>(null);
+  const [newStoreType, setNewStoreType] = useState<StoreInput["storetype"]>("restaurant");
+  const [newStoreAddress, setNewStoreAddress] = useState("");
+  const [newStoreMinimum, setNewStoreMinimum] = useState("");
+  const [isAddingStore, setIsAddingStore] = useState(false);
+  const [addStoreError, setAddStoreError] = useState("");
+  const [showNewStore, setShowNewStore] = useState(false);
+  useEffect(() => {
+    const controller = new AbortController();
+    async function loadStores() {
+      try {
+        const response = await fetch("/api/store", {
+          signal: controller.signal,
+        });
+        if (!response.ok) {
+          throw new Error("Could not load stores.");
+        }
+        const data: StoreOption[] = await response.json();
+        setStores(data);
+      } catch (error) {
+        if (!controller.signal.aborted) {
+          setStoreError(
+            error instanceof Error ? error.message : "Could not load stores."
+          );
+        }
+      } finally {
+        if (!controller.signal.aborted) {
+          setStoresLoading(false);
+        }
+      }
+    }
+    loadStores();
+    return () => controller.abort();
+  }, []);
+  async function handleAddStore() {
+    if (isAddingStore) return;
+    setAddStoreError("");
+    const name = storeName.trim();
+    const minimum = newStoreMinimum.trim();
+    if (!name || name.length > 20) {
+      setAddStoreError("Enter a store name between 1 and 20 characters.");
+      return;
+    }
+    if (
+      !/^\d+([.]\d{1,2})?$/.test(minimum) ||
+      Number(minimum) > 99999999.99
+    ) {
+      setAddStoreError("Enter a valid delivery minimum, such as 0 or 30.00.");
+      return;
+    }
+    setIsAddingStore(true);
+    try {
+      const store = await createStore({
+        enterprisename: name,
+        storetype: newStoreType,
+        address: newStoreAddress.trim() || null,
+        minimumorderamount: minimum,
+      });
+      setStores((previous) => [...previous, store]);
+      setStoreName(store.enterprisename);
+      setSelectedStoreId(store.storeid);
+      setShowNewStore(false);
+    } catch (error) {
+      setAddStoreError(
+        error instanceof Error ? error.message : "Could not add the store."
+      );
+    } finally {
+      setIsAddingStore(false);
+    }
+  }
+const storeSearch = storeName.trim().toLowerCase();
+const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.enterprisename.toLowerCase().includes(storeSearch)).slice(0, 5) : [];
   return (
     <main id="create-cart-page">
       <header id="banner">
@@ -80,11 +209,111 @@ export function CreateCartPage() {
           <div>
             <form action="" method="get" id="cart-form" onSubmit={handleFormSubmit}>
               <div className="form-text">
-                <label htmlFor="store">1. Store or Restaurant</label>
-                <input 
-                  type="text" name="store" id="store-input" 
-                  placeholder="Or type a place (e.g. Insomnia Cookies)" required
+                <label htmlFor="store-input">1. Store or Restaurant</label>
+                  <input
+                    type="text"
+                    id="store-input"
+                    name="store-name"
+                    value={storeName}
+                    maxLength={20}
+                    placeholder="Search or enter a store name"
+                    required
+                    disabled={isAddingStore}
+                    onChange={(event) => {
+                      setStoreName(event.target.value);
+                      setSelectedStoreId(null);
+                      setAddStoreError("");
+                      setShowNewStore(false);
+                    }}
+                  />
+                {/* The existing cart submission reads this selected store ID. */}
+                <input
+                  type="hidden"
+                  name="store"
+                  value={selectedStoreId ?? ""}
                 />
+                {storesLoading && <p role="status">Loading store suggestions...</p>}
+                {storeError && <p role="alert">{storeError}</p>}
+                {selectedStoreId === null && storeName.trim() && (
+                  <div aria-label="Matching stores" className="store-suggestions">
+                    {matchingStores.map((store) => (
+                      <button
+                        key={store.storeid}
+                        type="button"
+                        onClick={() => {
+                          setStoreName(store.enterprisename);
+                          setSelectedStoreId(store.storeid);
+                          setShowNewStore(false);
+                        }}
+                      >
+                        {store.enterprisename}
+                      </button>
+                    ))}
+                    {!storesLoading && storeSearch.length >= 2 && matchingStores.length === 0 && !storeError && (
+                      <p>This store is not listed yet.</p>
+                    )}
+                  </div>
+                )}
+                    {selectedStoreId === null && storeName.trim() && (
+                      <button className="store-toggle" type="button" disabled={isAddingStore}
+                        aria-expanded={showNewStore} onClick={() => {
+                          setShowNewStore((previous) => !previous);
+                          setAddStoreError("");
+                        }}
+                      >
+                        {showNewStore ? "Cancel adding store" : "Add a new store"}
+                      </button>
+                    )}
+                    {selectedStoreId === null && showNewStore && storeName.trim() && (
+                      <div className="new-store-panel">
+                        <p>Enter the new store’s details below.</p>
+                      <label htmlFor="new-store-type">Store category</label>
+                      <select
+                        id="new-store-type"
+                        value={newStoreType}
+                        onChange={(event) =>
+                          setNewStoreType(event.target.value as StoreInput["storetype"])
+                        }
+                      >
+                        <option value="restaurant">Restaurant</option>
+                        <option value="groceries">Groceries</option>
+                        <option value="electronics">Electronics</option>
+                        <option value="etc">Other</option>
+                      </select>
+                      <label htmlFor="new-store-address">
+                        Store address (optional for online stores)
+                      </label>
+                      <input
+                        id="new-store-address"
+                        type="text"
+                        maxLength={30}
+                        value={newStoreAddress}
+                        onChange={(event) => setNewStoreAddress(event.target.value)}
+                      />
+                      <label htmlFor="new-store-minimum">
+                        Store delivery minimum ($)
+                      </label>
+                      <input
+                        id="new-store-minimum"
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        value={newStoreMinimum}
+                        onChange={(event) => setNewStoreMinimum(event.target.value)}
+                      />
+                      {addStoreError && <p role="alert">{addStoreError}</p>}
+                      <button
+                        type="button"
+                        onClick={handleAddStore}
+                        disabled={isAddingStore}
+                      >
+                        {isAddingStore ? "Adding store..." : "Add this store"}
+                      </button>
+                    </div>
+                  )}
+                {selectedStoreId !== null && (
+                  <p role="status">Store selected: {storeName}</p>
+                )}
               </div>
               <div className="form-text" id="price-section">
                 2. Order Minimum & Your Share
@@ -93,8 +322,8 @@ export function CreateCartPage() {
                     <label htmlFor="threshold">Target Minimum</label>
                     <div className="general-container">
                       <span className="price-text">$</span>
-                      <input 
-                        type="text" inputMode="numeric" name="target_min"
+                      <input
+                        type="text" inputMode="decimal" name="target_min"
                         value={priceValues.targetMin} placeholder="0.00"
                         id="threshold" pattern="[0-9]+(\.[0-9][0-9]?)?"
                         className="price-input" required onChange={handleTargetChange}
@@ -105,8 +334,8 @@ export function CreateCartPage() {
                     <label htmlFor="start_amount">What you're spending</label>
                     <div className="general-container">
                       <span className="price-text">$</span>
-                      <input 
-                        type="text" inputMode="numeric" name="start_amount" 
+                      <input
+                        type="text" inputMode="decimal" name="start_amount"
                         value={priceValues.initValue} placeholder="0.00"
                         id="start_amount" pattern="[0-9]+(\.[0-9][0-9]?)?"
                         className="price-input" required onChange={handleInitChange}
@@ -117,7 +346,7 @@ export function CreateCartPage() {
                 <div id="notice-section">
                   <span><img src="/piggy_bank.svg" /></span>
                   <div className="general-text">
-                    Future cart participants need to add <span id="diff-text">${priceValues.targetMin - priceValues.initValue}</span> to unlock free delivery
+                    Future cart participants need to add <span id="diff-text">${Math.max(0,Number(priceValues.targetMin) - Number(priceValues.initValue)).toFixed(2)}</span> to reach the delivery minimum
                   </div>
                 </div>
               </div>
@@ -125,9 +354,9 @@ export function CreateCartPage() {
                 <label htmlFor="location-input" className="form-text">
                   3. Pickup Location (Common Spot)
                 </label>
-                <input 
-                  type="text" id="location-input" name="location-input" 
-                  list="prev-locations" placeholder="Type or select..." required 
+                <input
+                  type="text" id="location-input" name="location-input"
+                  list="prev-locations" placeholder="Type or select..." required
                   className="general-text"
                 />
 
@@ -146,7 +375,7 @@ export function CreateCartPage() {
               </div>
               <div id="deadline-section">
                 <label htmlFor="deadline-input" className="form-text">4. Deadline</label>
-                <input 
+                <input
                   type="datetime-local" id="deadline-input" name="deadline-input"
                   required
                 />
@@ -154,11 +383,13 @@ export function CreateCartPage() {
               <div id="notes-section">
                 <label htmlFor="notes-input" className="form-text">5. Notes (Optional)</label>
                 <input
-                  type="text" id="notes-input" name="notes-input"
-                  placeholder="e.g. Ordering one large pizza, will text when courier arrives"  
+                  type="text" id="notes-input" name="notes-input" maxLength={500}
+                  placeholder="e.g. Ordering one large pizza, will text when courier arrives"
                 />
-              </div>
-              <button id="submitBtn" type="submit">Create Cart</button>
+              </div>{submitError && <p role="alert">{submitError}</p>}{submitSuccess && <p role="status">{submitSuccess}</p>}
+              <button id="submitBtn" type="submit" disabled={isSubmitting || selectedStoreId === null}>
+                {isSubmitting ? "Creating cart..." : "Create Cart"}
+              </button>
             </form>
           </div>
         </div>
