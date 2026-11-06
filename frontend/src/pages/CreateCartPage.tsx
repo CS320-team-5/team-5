@@ -70,7 +70,7 @@ export function CreateCartPage() {
         setSubmitError("The minimum amount must be greater than zero.");
         return;
       }
-      // These fields need additional backend support.
+      
       if (
         !startingAmount.trim() ||
         !Number.isFinite(Number(startingAmount)) ||
