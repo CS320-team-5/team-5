@@ -1,6 +1,6 @@
 
 from pydantic import BaseModel, ConfigDict, Field
-
+from datetime import datetime 
 
 class ReviewCreate(BaseModel):
     model_config = ConfigDict(extra="forbid")
@@ -9,7 +9,8 @@ class ReviewCreate(BaseModel):
     authoruserid: int = Field(gt=0)
     rating: int
     commentbody: str | None = None
-
+    timeStamp: datetime | None = None
+	
 
 class ReviewUpdate(BaseModel):
     model_config = ConfigDict(extra="forbid")
@@ -24,3 +25,4 @@ class ReviewResponse(BaseModel):
     authoruserid: int
     rating: int
     commentbody: str | None = None
+    timeStamp: datetime
