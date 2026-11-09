@@ -115,18 +115,27 @@
   padding: 0;
 }
 
-.messaging-page .conversation-list li {
+.messaging-page .conversation-button {
+  display: block;
+  width: 100%;
   padding: 12px 8px;
+  border: 0;
   border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  text-align: left;
   font-size: 12px;
+  cursor: pointer;
 }
 
-.messaging-page .conversation-list .selected {
+.messaging-page .conversation-button span {
+  display: block;
+  color: #657269;
+}
+
+.messaging-page .conversation-button:hover,
+.messaging-page .conversation-button[aria-current="true"] {
   background: #E9F1FF;
-}
-
-.messaging-page .conversation-list small {
-  color: #006947;
 }
 
 .messaging-page .cart-details {
@@ -163,23 +172,6 @@
   font-size: 10px;
 }
 
-.messaging-page .split-list {
-  display: grid;
-  gap: 8px;
-  margin: 8px 0;
-}
-
-.messaging-page .split-list li,
-.messaging-page .venmo-details {
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
-}
-
-.messaging-page .split-list li > strong {
-  font-size: 12px;
-}
-
 .messaging-page .avatar {
   width: 34px;
   height: 34px;
@@ -198,37 +190,19 @@
   color: #723B32;
 }
 
-.messaging-page .person-amount {
+.messaging-page .cart-members {
+  display: grid;
+  gap: 8px;
+}
+
+.messaging-page .cart-members li {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.messaging-page .cart-members .badge {
   margin-left: auto;
-  text-align: right;
-}
-
-.messaging-page .person-amount strong {
-  display: block;
-  font: 700 20px "Outfit", sans-serif;
-}
-
-.messaging-page .person-amount small {
-  color: #007653;
-}
-
-.messaging-page .unpaid,
-.messaging-page .unpaid small {
-  color: #B5260B;
-}
-
-.messaging-page .venmo-details {
-  justify-content: space-between;
-}
-
-.messaging-page .venmo-details button {
-  padding: 4px 8px;
-  border: 0;
-  border-radius: 4px;
-  background: white;
-  color: #006947;
-  font-size: 11px;
-  cursor: pointer;
 }
 
 .messaging-page .pickup-details h2 {
@@ -381,7 +355,7 @@
 
   .messaging-page .conversation-list ul {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
