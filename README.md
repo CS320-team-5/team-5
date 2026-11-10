@@ -59,6 +59,13 @@ npm run lint
 npm run test -- --run
 ```
 
+Messaging at `/messages` uses sample data in `frontend/src/data/messaging.js`.
+Messages, drafts, and members are scoped by `cartId`; demo state resets on page exit.
+
+Backend: load the user's carts and members, then connect GET/POST
+`/api/message/cart/{cart_id}` using a bearer token and `{ "messagetext": text }`.
+Map API fields in `MessagingPage.jsx` and clear the draft after a successful send.
+
 ## Backend
 
 From the project root:

@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { render, screen, cleanup, waitFor, act } from '@testing-library/react'
+import { render, screen, cleanup, waitFor, act, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { BrowserRouter } from 'react-router'
 import { afterEach, beforeEach, expect, test } from 'vitest'
@@ -66,4 +66,24 @@ test('dashboard messages link opens a chat that can send messages', async () => 
 
   await user.click(screen.getByRole('button', { name: 'Sent Venmo ✓' }))
   expect(screen.getByRole('log').textContent).toContain('Sent Venmo ✓')
+})
+
+test('switching carts keeps messages and drafts separate', async () => {
+  const user = userEvent.setup()
+  window.history.replaceState(null, '', '/messages')
+  renderApp()
+
+  expect(screen.queryByText(/Cart Split|Who Paid|Carlos M\.|Direct ·/)).toBeNull()
+  const input = screen.getByRole('textbox', { name: 'Message' })
+  await user.type(input, 'Grocery draft')
+  await user.click(screen.getByRole('button', { name: /Chipotle Run/ }))
+  expect(input.value).toBe('')
+  const members = within(screen.getByRole('region', { name: "Who's in this cart" }))
+  expect(members.getAllByRole('listitem')).toHaveLength(2)
+  await user.type(input, 'Chipotle only{Enter}')
+  expect(screen.getByRole('log').textContent).toContain('Chipotle only')
+
+  await user.click(screen.getByRole('button', { name: /Trader Joe's Cart/ }))
+  expect(input.value).toBe('Grocery draft')
+  expect(screen.getByRole('log').textContent).not.toContain('Chipotle only')
 })
