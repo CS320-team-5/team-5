@@ -13,7 +13,7 @@ def test_get_user_selects_only_public_columns(fake_db, user_row):
 
     assert result == user_row
     fake_db.table.assert_called_once_with("users")
-    query.select.assert_called_once_with(PUBLIC_USER_COLUMNS)
+    query.select.assert_called_once_with("userid,name,location,deleted_at")
     query.eq.assert_called_once_with("userid", 7)
     query.limit.assert_called_once_with(1)
     assert "authid" not in PUBLIC_USER_COLUMNS
