@@ -115,6 +115,8 @@ def get_all_carts(
         )
     except (APIError, RequestError) as error:
         _raise_database_error(error)
+        
+    return [Cart(**row) for row in rows]
 
 def get_cart(db: Client, cart_id: int) -> Cart:
     return find_cart(db, cart_id)

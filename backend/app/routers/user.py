@@ -11,8 +11,6 @@ from ..models.settings import UserSettings, UserSettingsUpdate
 from ..repositories.settings import get_user_settings, update_user_settings
 from httpx import RequestError
 from postgrest.exceptions import APIError
-from ..models.payment_handles import PaymentHandles, PaymentHandlesUpdate
-from ..repositories.payment_handles import get_payment_handles, update_payment_handles
 from supabase_auth.errors import AuthApiError
 
 router = APIRouter(prefix="/api/user", tags=["User"])
@@ -55,27 +53,6 @@ def update_current_user_settings(
         raise HTTPException(
             status_code=503, detail="Could not save settings"
         ) from error
-
-@router.get("/me/payment-handles", response_model=PaymentHandles)
-def get_current_user_payment_handles(
-    session: AuthSession = Depends(get_auth_session),
-):
-    try:
-        return get_payment_handles(session.db, session.auth_id)
-    except (APIError, RequestError) as error:
-        raise HTTPException(503, "Could not load payment handles") from error
-
-
-@router.patch("/me/payment-handles", response_model=PaymentHandles)
-def update_current_user_payment_handles(
-    body: PaymentHandlesUpdate,
-    session: AuthSession = Depends(get_auth_session),
-):
-    try:
-        changes = body.model_dump(exclude_unset=True)
-        return update_payment_handles(session.db, session.auth_id, changes)
-    except (APIError, RequestError, RuntimeError) as error:
-        raise HTTPException(503, "Could not save payment handles") from error
 
 @router.delete("/me", status_code=204)
 def delete_current_user(
