@@ -36,3 +36,13 @@ def get_user_supabase(access_token: str) -> Client:
     client.postgrest.auth(access_token)
 
     return client
+
+@lru_cache
+def get_supabase_admin() -> Client:
+    url = os.getenv("SUPABASE_URL")
+    key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+
+    if not url or not key:
+        raise RuntimeError("Supabase admin client is not configured")
+
+    return create_client(url, key)

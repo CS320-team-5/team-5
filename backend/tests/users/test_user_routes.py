@@ -24,7 +24,7 @@ def test_get_user(client, fake_db, monkeypatch):
         "location": "Boston",
         "authid": "should-not-leak",
     })
-    monkeypatch.setattr(user_router.user_service, "get_user", get_user)
+    monkeypatch.setattr(user_router.user_service, "get_public_user", get_user)
 
     response = client.get("/api/user/12")
 
