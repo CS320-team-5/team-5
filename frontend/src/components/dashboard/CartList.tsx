@@ -1,4 +1,5 @@
 import { type CartDetails } from '../../types/cart';
+import { UserRoundPlus } from "lucide-react";
 
 /** Render the current cart data as cards. */
 export function CartList({ cartList }: { cartList: CartDetails[] }) {
@@ -48,7 +49,7 @@ export function CartList({ cartList }: { cartList: CartDetails[] }) {
             <div className="progress-fill" style={{ width: `${percentage}%` }}></div>
           </div>
         </div>
-        <button className="join-button" type="button">Join Cart</button>
+        <button className="join-button" type="button"><UserRoundPlus size={14} strokeWidth={3}/>Join Cart</button>
       </div>
     );
   });

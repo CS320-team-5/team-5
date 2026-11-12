@@ -177,6 +177,11 @@
   text-align: center;
   border: none;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+
 }
 .dashboard-page .join-button:hover {
   background-color: #1f4732;
