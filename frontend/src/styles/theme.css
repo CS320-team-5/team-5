@@ -1,0 +1,149 @@
+:root {
+  --primary-green: #00855B; /* used for titles, logos, progress, bars, etc. */
+  --secondary-green: #006947; /* used for buttons, general text */
+  --title-text-color: #0B1C30; /* for titles/subtitles/text that should stand out */
+  --general-text-color: #3D4A42; /* for any other text */
+  --user-account-color: #86F8C2; /* for user account color in banner */
+  --warning-text-color: #B5260B; /* warnings about "low" quantity (ex: cart deadline soon, money required for cart) */
+  --title-font: "Outfit", serif;
+  --general-font: "Plus Jakarta Sans", sans-serif;
+  --page-bg-color: #F8F9FF;
+}
+
+/* rule for page background/general details */
+#page-structure {
+  background-color: var(--page-bg-color);
+  min-height: 100vh;
+  padding: 16px 24px;
+}
+
+/* use these for form submission buttons at the end of the page */
+#submitFormBtn {
+  width: 100%;
+  height: 52px;
+  border-radius: 8px;
+  color: white;
+  background-color: var(--primary-green);
+  border: none;
+}
+#submitFormBtn:hover {
+  background-color: var(--secondary-green);
+}
+
+/* STYLES REQUIRED FOR THE BANNER */
+#banner {
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  background: #F8F9FF;
+}
+#center-banner-part,
+#left-banner-part,
+#right-banner-part {
+  display: flex;
+  align-items: center;
+}
+#left-banner-part {
+  justify-self: start;
+  gap: 8px;
+  text-decoration: none;
+}
+#center-banner-part {
+  gap: 4px;
+
+}
+#right-banner-part {
+  justify-self: end;
+}
+/* Style for the "Co-Cart" text next to the logo in the top left */
+#logo-title {
+  font-family: "Outfit", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: bold;
+  font-size: 22px;
+  color: var(--primary-green);
+}
+/* Styles for the Banner Buttons (currently Browse Carts, Start a Cart, and Messages) */
+.banner-button {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: bold;
+  font-size: 16px;
+  border: none;
+  border-radius: 9999px;
+  padding: 6px 12px;
+  background: none;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  color: var(--general-text-color);
+}
+.banner-button:hover {
+  background: var(--primary-green);
+  color: #F5FFF6;
+}
+
+/* Style for the Account Pill on the right side of the banner (Initials, Full Name) */
+.account-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 16px 6px 6px;
+  border: none;
+  border-radius: 9999px;
+  background: #fff;
+  cursor: pointer;
+  font-family: var(--general-font);
+  font-size: 16px;
+  text-decoration: none;
+  color: var(--general-text-color);
+}
+.account-pill:hover {
+  background: #f5f6f8;
+}
+.account-initials {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--user-account-color);
+  color: var(--general-text-color);
+  font-weight: bold;
+}
+
+
+/* General text styles */
+
+/* 
+  Style for "title" of page
+  - "Active Community Carts" (on browse carts page)
+  - "Log In"/"Sign Up" on login/signup pages
+  - "Start a Cart" on cart creation page
+  - "Messages" on messages page
+*/
+/* rules for "Active Community Carts" section */
+#page-title {
+  margin: 0;
+  font-size: 32px;
+  font-family: "Outfit", sans-serif;
+  color: var(--title-text-color);
+  font-weight: bold;
+}
+
+/* summary/info text -- general information */
+.info-text {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-weight: normal;
+  font-size: 14px;
+  color: var(--general-text-color);
+}
+/* can use this alongside info text to make smaller text */
+.small-font {
+  font-size: 12px;
+}

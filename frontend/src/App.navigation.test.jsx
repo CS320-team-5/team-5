@@ -24,7 +24,7 @@ test('clicking nav links changes the page', async () => {
   expect(window.location.pathname).toBe('/dashboard')
   expect(screen.getByText('Active Community Carts')).toBeTruthy()
 
-  await user.click(screen.getByLabelText('CoCart home'))
+  await user.click(screen.getByLabelText('Co-Cart home'))
   expect(window.location.pathname).toBe('/')
   expect(screen.getByText('Meet the delivery minimum, together.')).toBeTruthy()
 })

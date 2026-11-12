@@ -4,6 +4,7 @@ import { MapPin, Send, ShoppingBasket } from 'lucide-react'
 import { getMyProfile, getMyMessageCarts, getCartMessages, getCartMembers, getPublicUser, sendCartMessage } from '../services/message'
 import '../styles/dashboard.css'
 import '../styles/messaging.css'
+import Banner from "../components/Banner";
 
 const initialsFor = (name) => (name || '?').split(/\s+/).slice(0, 2).map(part => part[0] || '').join('').toUpperCase()
 const formatTime = (timestamp) => new Date(timestamp).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })

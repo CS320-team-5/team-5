@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { DashboardContent } from '../components/dashboard/DashboardContent';
 import { sampleCarts, sampleFilters } from '../data/dashboard';
 import { type CartDetails } from '../types/cart';
-import '../styles/dashboard.css';
 
 function DashboardPage() {
   const [results, setCartList] = useState<CartDetails[]>([]);
@@ -24,9 +23,9 @@ function DashboardPage() {
   }, []); // indicate that this should load on mount
 
   return (
-    <div className="dashboard-page">
+    <>
       <DashboardContent cartList={results} filterList={filters} />
-    </div>
+    </>
   );
 }
 

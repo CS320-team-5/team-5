@@ -1,5 +1,6 @@
-import { Link } from "react-router";
 import '../styles/createcart.css';
+import '../styles/theme.css';
+import Banner from '../components/Banner';
 import { useEffect, useState } from "react";
 import { createCart } from "../services/cart";
 import { createStore, type StoreInput } from "../services/store";
@@ -183,28 +184,13 @@ const storeSearch = storeName.trim().toLowerCase();
 const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.enterprisename.toLowerCase().includes(storeSearch)).slice(0, 5) : [];
   return (
     <main id="create-cart-page">
-      <header id="banner">
-        <Link id="left-banner-part" to="/" aria-label="CoCart home">
-          <img src="/hero_logo.svg" />
-          <span id="logo-title">Co-Cart</span>
-        </Link>
-        <nav id="center-banner-part" aria-label="Dashboard navigation">
-          <Link className="banner-button" to="/dashboard" aria-current="page">Browse Carts</Link>
-          <button className="banner-button" type="button">Start a Cart</button>
-          <button className="banner-button" type="button">Messages</button>
-        </nav>
-        <div id="right-banner-part">
-          <button className="pill" type="button">
-            <span className="initials">ML</span>
-            <span className="name">Maya (Building 4)</span>
-          </button>
-        </div>
-      </header>
+      <Banner />
+      <br /><br />
       <div id="form-section">
         <div id="form-container">
           <div id="start-cart-header">
-            <div id="start-cart-title">Start a Cart</div>
-            <div className="general-text">Set up a shared order so neighbors can add to your cart.</div>
+            <div id="page-title">Start a Cart</div>
+            <div className="info-text">Set up a shared order so others can add to your cart.</div>
           </div>
           <div>
             <form action="" method="get" id="cart-form" onSubmit={handleFormSubmit}>
@@ -217,6 +203,7 @@ const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.
                     value={storeName}
                     maxLength={20}
                     placeholder="Search or enter a store name"
+                    className="general-text"
                     required
                     disabled={isAddingStore}
                     onChange={(event) => {
@@ -266,7 +253,7 @@ const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.
                     )}
                     {selectedStoreId === null && showNewStore && storeName.trim() && (
                       <div className="new-store-panel">
-                        <p>Enter the new store’s details below.</p>
+                        <p>Enter the new store's details below.</p>
                       <label htmlFor="new-store-type">Store category</label>
                       <select
                         id="new-store-type"
@@ -326,7 +313,7 @@ const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.
                         type="text" inputMode="decimal" name="target_min"
                         value={priceValues.targetMin} placeholder="0.00"
                         id="threshold" pattern="[0-9]+(\.[0-9][0-9]?)?"
-                        className="price-input" required onChange={handleTargetChange}
+                        className="price-input" required onChange={handleTargetChange} maxLength={10}
                       />
                     </div>
                   </div>
@@ -338,15 +325,15 @@ const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.
                         type="text" inputMode="decimal" name="start_amount"
                         value={priceValues.initValue} placeholder="0.00"
                         id="start_amount" pattern="[0-9]+(\.[0-9][0-9]?)?"
-                        className="price-input" required onChange={handleInitChange}
+                        className="price-input" required onChange={handleInitChange} maxLength={10}
                       />
                     </div>
                   </div>
                 </div>
                 <div id="notice-section">
                   <span><img src="/piggy_bank.svg" /></span>
-                  <div className="general-text">
-                    Future cart participants need to add <span id="diff-text">${Math.max(0,Number(priceValues.targetMin) - Number(priceValues.initValue)).toFixed(2)}</span> to reach the delivery minimum
+                  <div className="info-text">
+                    Future cart participants need to add <span id="diff-text">${Math.max(0,Number(priceValues.targetMin) - Number(priceValues.initValue)).toFixed(2)}</span> to reach minimum
                   </div>
                 </div>
               </div>
@@ -357,7 +344,7 @@ const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.
                 <input
                   type="text" id="location-input" name="location-input"
                   list="prev-locations" placeholder="Type or select..." required
-                  className="general-text"
+                  className="info-text"
                 />
 
                 <datalist id="prev-locations">
@@ -383,7 +370,7 @@ const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.
               <div id="notes-section">
                 <label htmlFor="notes-input" className="form-text">5. Notes (Optional)</label>
                 <input
-                  type="text" id="notes-input" name="notes-input" maxLength={500}
+                  type="text" id="notes-input" name="notes-input" maxLength={500} className="info-text"
                   placeholder="e.g. Ordering one large pizza, will text when courier arrives"
                 />
               </div>{submitError && <p role="alert">{submitError}</p>}{submitSuccess && <p role="status">{submitSuccess}</p>}
