@@ -142,6 +142,7 @@
   color: white;
   flex-shrink: 0;
   cursor: pointer;
+  text-decoration: none;
 }
 .dashboard-page #start-cart-button:hover {
   background-color: #1f4732;
