@@ -7,6 +7,14 @@
   --warning-text-color: #B5260B; /* warnings about "low" quantity (ex: cart deadline soon, money required for cart) */
   --title-font: "Outfit", serif;
   --general-font: "Plus Jakarta Sans", sans-serif;
+  --page-bg-color: #F8F9FF;
+}
+
+/* rule for page background/general details */
+#create-cart-page {
+  background-color: var(--page-bg-color);
+  min-height: 100vh;
+  padding: 16px 24px;
 }
 
 /* use these for form submission buttons at the end of the page */
@@ -56,7 +64,7 @@
 #logo-title {
   font-family: "Outfit", sans-serif;
   font-optical-sizing: auto;
-  font-weight: 700;
+  font-weight: bold;
   font-size: 22px;
   color: var(--primary-green);
 }
@@ -64,7 +72,7 @@
 .banner-button {
   font-family: "Plus Jakarta Sans", sans-serif;
   font-optical-sizing: auto;
-  font-weight: 600;
+  font-weight: bold;
   font-size: 16px;
   border: none;
   border-radius: 9999px;
@@ -122,13 +130,13 @@
   font-size: 32px;
   font-family: "Outfit", sans-serif;
   color: var(--title-text-color);
-  font-weight: 700;
+  font-weight: bold;
 }
 
 /* summary/info text -- general information */
 #info-text {
   font-family: "Plus Jakarta Sans", sans-serif;
-  font-weight: 400;
+  font-weight: normal;
   font-size: 14px;
   color: var(--general-text-color);
 }
