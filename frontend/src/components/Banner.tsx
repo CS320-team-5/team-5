@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import theme from "../styles/theme.module.css";
 
-function Banner() {
+export default function Banner() {
   return (
     <header id="banner">
       <Link id="left-banner-part" to="/" aria-label="CoCart home">
