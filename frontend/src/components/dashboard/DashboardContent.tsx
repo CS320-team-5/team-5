@@ -2,10 +2,12 @@ import { Link } from 'react-router';
 import { CartList } from './CartList';
 import { FilterList } from './FilterList';
 import { type CartDetails } from '../../types/cart';
+import "../../styles/theme.css";
+import "../../styles/dashboard.css";
 
-export function DashboardContent({ cartList, filterList }: { cartList: CartDetails[], filterList: string[] }) {
+export function DashboardContent({ cartList, filterList }: { cartList: CartDetails[], filterList: string[], }) {
   return (
-    <>
+    <div className="theme dashboard-page">
       <header id="banner">
         <Link id="left-banner-part" to="/" aria-label="CoCart home">
           <img src="/hero_logo.svg" />
@@ -49,6 +51,6 @@ export function DashboardContent({ cartList, filterList }: { cartList: CartDetai
           <CartList cartList={cartList} />
         </div>
       </main>
-    </>
+    </div>
   );
 }
