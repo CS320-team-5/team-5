@@ -5,6 +5,7 @@ import Banner from '../Banner';
 import { type CartDetails } from '../../types/cart';
 import "../../styles/theme.css";
 import "../../styles/dashboard.css";
+import { ShoppingCartPlus } from "lucide-react";
 
 export function DashboardContent({ cartList, filterList }: { cartList: CartDetails[], filterList: string[], }) {
   return (
@@ -25,7 +26,7 @@ export function DashboardContent({ cartList, filterList }: { cartList: CartDetai
               Find a nearby group order to hit free delivery minimums and split costs.
             </div>
             <Link id="start-cart-button" className="info-text" to="/create" aria-current="page">
-              + Start a Cart
+              <ShoppingCartPlus size={16} /> Start a Cart
             </Link>
           </div>
         </div>

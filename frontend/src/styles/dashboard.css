@@ -53,6 +53,9 @@
   flex-shrink: 0;
   cursor: pointer;
   text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 .dashboard-page #start-cart-button:hover {
   background-color: #1f4732;
