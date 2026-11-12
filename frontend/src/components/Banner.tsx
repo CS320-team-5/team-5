@@ -1,11 +1,15 @@
 import { Link } from "react-router";
 import "../styles/theme.css";
+import { ShoppingBasket } from "lucide-react";
 
+/**
+ * Banner appearing on the Active Carts, Cart Creation, Messaging, and Settings pages
+ */
 function Banner() {
   return (
     <header id="banner">
       <Link id="left-banner-part" to="/" aria-label="CoCart home">
-        <img src="/hero_logo.svg" />
+        <ShoppingBasket color="var(--primary-green)"/>
         <span id="logo-title">Co-Cart</span>
       </Link>
       <nav id="center-banner-part" aria-label="Dashboard navigation">
