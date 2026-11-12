@@ -4,6 +4,7 @@ import { MapPin, Send, ShoppingBasket } from 'lucide-react'
 import { cartConversations, initialMessages } from '../data/messaging'
 import '../styles/dashboard.css'
 import '../styles/messaging.css'
+import Banner from "../components/Banner";
 
 function MessagingPage() {
   const [messages, setMessages] = useState(initialMessages)

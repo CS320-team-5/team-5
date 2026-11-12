@@ -80,8 +80,8 @@
   background: none;
   text-align: center;
   text-decoration: none;
-  color: inherit;
   cursor: pointer;
+  color: var(--general-text-color);
 }
 .banner-button:hover {
   background: var(--primary-green);
