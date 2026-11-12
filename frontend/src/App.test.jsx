@@ -30,7 +30,7 @@ test.each(['/dashboard', '/dashboard/'])('dashboard at %s, has a way back home',
   const html = page(url)
 
   expect(html).toContain(DASH)
-  expect(html).toContain('aria-label="CoCart home"')
+  expect(html).toContain('aria-label="Co-Cart home"')
   expect(html).toContain('href="/"')
   expect(html).not.toContain(HOME)
 })
