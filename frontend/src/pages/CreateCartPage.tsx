@@ -267,7 +267,7 @@ const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.
                     )}
                     {selectedStoreId === null && showNewStore && storeName.trim() && (
                       <div className="new-store-panel">
-                        <p>Enter the new store’s details below.</p>
+                        <p>Enter the new store's details below.</p>
                       <label htmlFor="new-store-type">Store category</label>
                       <select
                         id="new-store-type"
@@ -327,7 +327,7 @@ const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.
                         type="text" inputMode="decimal" name="target_min"
                         value={priceValues.targetMin} placeholder="0.00"
                         id="threshold" pattern="[0-9]+(\.[0-9][0-9]?)?"
-                        className="price-input" required onChange={handleTargetChange}
+                        className="price-input" required onChange={handleTargetChange} maxLength={10}
                       />
                     </div>
                   </div>
@@ -339,7 +339,7 @@ const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.
                         type="text" inputMode="decimal" name="start_amount"
                         value={priceValues.initValue} placeholder="0.00"
                         id="start_amount" pattern="[0-9]+(\.[0-9][0-9]?)?"
-                        className="price-input" required onChange={handleInitChange}
+                        className="price-input" required onChange={handleInitChange} maxLength={10}
                       />
                     </div>
                   </div>
