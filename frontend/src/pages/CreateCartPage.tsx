@@ -1,4 +1,3 @@
-import { Link } from "react-router";
 import '../styles/createcart.css';
 import '../styles/theme.css';
 import Banner from '../components/Banner';
