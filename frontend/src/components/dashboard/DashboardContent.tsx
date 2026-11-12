@@ -15,13 +15,13 @@ export function DashboardContent({ cartList, filterList }: { cartList: CartDetai
         <div>
           <div style={{display: "flex", alignItems: "center", gap: "4px"}}>
             <div id="circle"></div>
-            <div style={{color: "#006947", fontFamily: "Plus Jakarta Sans", fontWeight: 700, fontSize: "11px"}}>
+            <div style={{color: "#006947", fontFamily: "Plus Jakarta Sans", fontWeight: "bold", fontSize: "11px"}}>
               LIVE ORDERING
             </div>
           </div>
           <h1 id="page-title">Active Community Carts</h1>
           <div id="summary-and-btn">
-            <div id="info-text">
+            <div className="info-text">
               Find a nearby group order to hit free delivery minimums and split costs.
             </div>
             <Link id="start-cart-button" className="info-text" to="/create" aria-current="page">
