@@ -1,5 +1,7 @@
 import { Link } from "react-router";
 import '../styles/createcart.css';
+import '../styles/theme.css';
+import Banner from '../components/Banner';
 import { useEffect, useState } from "react";
 import { createCart } from "../services/cart";
 import { createStore, type StoreInput } from "../services/store";
@@ -183,23 +185,8 @@ const storeSearch = storeName.trim().toLowerCase();
 const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.enterprisename.toLowerCase().includes(storeSearch)).slice(0, 5) : [];
   return (
     <main id="create-cart-page">
-      <header id="banner">
-        <Link id="left-banner-part" to="/" aria-label="CoCart home">
-          <img src="/hero_logo.svg" />
-          <span id="logo-title">Co-Cart</span>
-        </Link>
-        <nav id="center-banner-part" aria-label="Dashboard navigation">
-          <Link className="banner-button" to="/dashboard" aria-current="page">Browse Carts</Link>
-          <button className="banner-button" type="button">Start a Cart</button>
-          <Link className="banner-button" to="/messages" aria-current="page">Messages</Link>
-        </nav>
-        <div id="right-banner-part">
-          <button className="pill" type="button">
-            <span className="initials">ML</span>
-            <span className="name">Maya (Building 4)</span>
-          </button>
-        </div>
-      </header>
+      <Banner />
+      <br /><br />
       <div id="form-section">
         <div id="form-container">
           <div id="start-cart-header">

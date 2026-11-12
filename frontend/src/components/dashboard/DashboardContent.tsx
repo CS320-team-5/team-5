@@ -1,6 +1,7 @@
 import { Link } from 'react-router';
 import { CartList } from './CartList';
 import { FilterList } from './FilterList';
+import Banner from '../Banner';
 import { type CartDetails } from '../../types/cart';
 import "../../styles/theme.css";
 import "../../styles/dashboard.css";
@@ -8,23 +9,7 @@ import "../../styles/dashboard.css";
 export function DashboardContent({ cartList, filterList }: { cartList: CartDetails[], filterList: string[], }) {
   return (
     <div className="theme dashboard-page">
-      <header id="banner">
-        <Link id="left-banner-part" to="/" aria-label="CoCart home">
-          <img src="/hero_logo.svg" />
-          <span id="logo-title">Co-Cart</span>
-        </Link>
-        <nav id="center-banner-part" aria-label="Dashboard navigation">
-          <Link className="banner-button" to="/dashboard" aria-current="page">Browse Carts</Link>
-          <Link className="banner-button" to="/create" aria-current="page">Start a Cart</Link>
-          <Link className="banner-button" to="/messages" aria-current="page">Messages</Link>
-        </nav>
-        <div id="right-banner-part">
-          <button className="pill" type="button">
-            <span className="initials">ML</span>
-            <span className="name">Maya (Building 4)</span>
-          </button>
-        </div>
-      </header>
+      <Banner />
       <br /><br />
       <main>
         <div>
@@ -34,12 +19,14 @@ export function DashboardContent({ cartList, filterList }: { cartList: CartDetai
               LIVE ORDERING
             </div>
           </div>
-          <h1 id="main-title">Active Community Carts</h1>
+          <h1 id="page-title">Active Community Carts</h1>
           <div id="summary-and-btn">
-            <div id="summary-text">
+            <div id="info-text">
               Find a nearby group order to hit free delivery minimums and split costs.
             </div>
-            <Link id="start-cart-button" to="/create" aria-current="page">+ Start a Cart</Link>
+            <Link id="start-cart-button" className="info-text" to="/create" aria-current="page">
+              + Start a Cart
+            </Link>
           </div>
         </div>
         <br />
