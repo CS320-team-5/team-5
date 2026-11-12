@@ -14,7 +14,9 @@ ROW = {
 
 
 def test_owner_can_send(monkeypatch, user_session):
-    monkeypatch.setattr(service.repository, "find_cart", lambda db, cid: {"owneruserid": 7})
+    monkeypatch.setattr(service.repository, "find_cart", lambda db, cid: {
+        "owneruserid": 7, "status": "Active", "deadline": "2099-12-01T00:00:00+00:00"
+    })
     create = MagicMock(return_value=ROW)
     monkeypatch.setattr(service.repository, "create_message", create)
     result = service.create_cart_message(user_session, 3, MessageCreate(messagetext="Hello"))

@@ -3,7 +3,7 @@ from supabase import Client
 
 
 def find_cart(db: Client, cart_id: int) -> dict | None:
-    rows = (db.table("cart").select("cartid,owneruserid")
+    rows = (db.table("cart").select("*")
             .eq("cartid", cart_id).limit(1).execute().data)
     return rows[0] if rows else None
 
@@ -54,3 +54,18 @@ def delete_message(db: Client, message_id: int, user_id: int) -> bool:
             .eq("messageid", message_id).eq("userid", user_id)
             .select("messageid").execute().data)
     return bool(rows)
+
+
+def list_message_carts(db: Client, user_id: int) -> list[dict]:
+    """Only carts the user owns or actively participates in (including expired carts)."""
+    columns = "*"
+    owned = (db.table("cart").select(columns)
+             .eq("owneruserid", user_id).execute().data)
+    participation = (db.table("cartparticipant").select("cartid")
+                     .eq("userid", user_id).eq("status", "Active")
+                     .execute().data)
+    owned_ids = {cart["cartid"] for cart in owned}
+    participant_ids = list({row["cartid"] for row in participation} - owned_ids)
+    joined = (db.table("cart").select(columns)
+              .in_("cartid", participant_ids).execute().data) if participant_ids else []
+    return sorted([*owned, *joined], key=lambda cart: cart["deadline"], reverse=True)

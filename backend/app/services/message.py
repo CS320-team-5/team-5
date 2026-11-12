@@ -1,5 +1,7 @@
 """Cart access and message ownership checks; DB RLS remains the final gate."""
 from typing import NoReturn
+from datetime import datetime, timezone
+from ..models.cart import Cart
 
 from fastapi import HTTPException
 from httpx import RequestError
@@ -22,18 +24,36 @@ def _db_error(error: APIError | RequestError) -> NoReturn:
     raise HTTPException(503, "Supabase could not complete the request") from error
 
 
-def _access_cart(session: AuthSession, cart_id: int) -> None:
+def _access_cart(session: AuthSession, cart_id: int) -> dict:
     try:
         cart = repository.find_cart(session.db, cart_id)
         if cart is None:
             raise HTTPException(404, "Cart not found")
         if cart["owneruserid"] == session.user_id:
-            return
+            return cart
         if repository.find_active_participant(session.db, cart_id, session.user_id):
-            return
+            return cart
     except (APIError, RequestError) as error:
         _db_error(error)
     raise HTTPException(403, "Only the owner or active participants can access this cart's messages")
+
+
+def get_message_carts(session: AuthSession) -> list[Cart]:
+    try:
+        rows = repository.list_message_carts(session.db, session.user_id)
+        return [Cart.model_validate(row) for row in rows]
+    except (APIError, RequestError) as error:
+        _db_error(error)
+
+
+def _require_open_cart(cart: dict) -> None:
+    if cart.get("status") != "Active":
+        raise HTTPException(409, "Cannot send messages to an inactive cart")
+    deadline = cart.get("deadline")
+    if deadline is None:
+        raise HTTPException(409, "Cart deadline is missing")
+    if datetime.fromisoformat(str(deadline).replace("Z", "+00:00")) <= datetime.now(timezone.utc):
+        raise HTTPException(409, "Cannot send messages after the cart deadline")
 
 
 def get_cart_messages(session: AuthSession, cart_id: int, limit: int) -> list[Message]:
@@ -46,7 +66,8 @@ def get_cart_messages(session: AuthSession, cart_id: int, limit: int) -> list[Me
 
 
 def create_cart_message(session: AuthSession, cart_id: int, body: MessageCreate) -> Message:
-    _access_cart(session, cart_id)
+    cart = _access_cart(session, cart_id)
+    _require_open_cart(cart)
     try:
         row = repository.create_message(session.db, cart_id, session.user_id, body.messagetext)
     except (APIError, RequestError) as error:
