@@ -4,14 +4,6 @@
   padding: 16px 24px;
 }
 
-.dashboard-page .filter-text,
-.dashboard-page .location-text {
-  font-family: "Plus Jakarta Sans", sans-serif;
-  font-weight: normal;
-  font-size: 14px;
-  color: #3D4A42;
-}
-
 .dashboard-page #logo-title,
 .dashboard-page .outfit-body,
 .dashboard-page .store-title {
@@ -80,10 +72,6 @@
   gap: 5px;
 }
 
-.dashboard-page .filter-text {
-  font-size: 12px;
-}
-
 .dashboard-page #cart-list {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -147,10 +135,6 @@
   font-family: "Plus Jakarta Sans", sans-serif;
 }
 
-.dashboard-page .location-text {
-  font-size: 12px;
-}
-
 .dashboard-page .status-cell {
   background: #EFF4FF;
   padding: 8px;
@@ -186,7 +170,7 @@
   background: #006947;
   font-family: "Plus Jakarta Sans", sans-serif;
   font-weight: bold;
-  font-size: inherit;
+  font-size: 14px;
   color: white;
   padding: 10px;
   border-radius: 8px;
