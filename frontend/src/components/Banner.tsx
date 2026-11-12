@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import theme from "../styles/theme.module.css";
+import "../styles/theme.css";
 
 function Banner() {
   return (
@@ -22,3 +22,5 @@ function Banner() {
     </header>
   );
 }
+
+export default Banner
