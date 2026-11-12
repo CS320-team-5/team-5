@@ -8,7 +8,7 @@ import { ShoppingBasket } from "lucide-react";
 function Banner() {
   return (
     <header id="banner">
-      <Link id="left-banner-part" to="/" aria-label="CoCart home">
+      <Link id="left-banner-part" to="/" aria-label="Co-Cart home">
         <ShoppingBasket color="var(--primary-green)"/>
         <span id="logo-title">Co-Cart</span>
       </Link>
@@ -17,12 +17,14 @@ function Banner() {
         <Link className="banner-button" to="/create" aria-current="page">Start a Cart</Link>
         <Link className="banner-button" to="/messages" aria-current="page">Messages</Link>
       </nav>
-      <div id="right-banner-part">
-        <button className="account-pill" type="button">
+      <Link 
+        id="right-banner-part" to="/settings" 
+        aria-current="page" aria-label="Account Settings" 
+        className="account-pill" type="button"
+      >
           <span className="account-initials">ML</span>
           <span className="name">Maya (Building 4)</span>
-        </button>
-      </div>
+      </Link>
     </header>
   );
 }

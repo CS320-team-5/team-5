@@ -98,7 +98,10 @@
   border-radius: 9999px;
   background: #fff;
   cursor: pointer;
-  font-family: "Plus Jakarta Sans", sans-serif;
+  font-family: var(--general-font);
+  font-size: 16px;
+  text-decoration: none;
+  color: var(--general-text-color);
 }
 .account-pill:hover {
   background: #f5f6f8;
