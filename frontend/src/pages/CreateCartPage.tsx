@@ -217,6 +217,7 @@ const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.
                     value={storeName}
                     maxLength={20}
                     placeholder="Search or enter a store name"
+                    className="general-text"
                     required
                     disabled={isAddingStore}
                     onChange={(event) => {
@@ -383,7 +384,7 @@ const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.
               <div id="notes-section">
                 <label htmlFor="notes-input" className="form-text">5. Notes (Optional)</label>
                 <input
-                  type="text" id="notes-input" name="notes-input" maxLength={500}
+                  type="text" id="notes-input" name="notes-input" maxLength={500} className="general-text"
                   placeholder="e.g. Ordering one large pizza, will text when courier arrives"
                 />
               </div>{submitError && <p role="alert">{submitError}</p>}{submitSuccess && <p role="status">{submitSuccess}</p>}
