@@ -11,7 +11,7 @@
 }
 
 /* rule for page background/general details */
-#create-cart-page {
+#page-structure {
   background-color: var(--page-bg-color);
   min-height: 100vh;
   padding: 16px 24px;
@@ -134,7 +134,7 @@
 }
 
 /* summary/info text -- general information */
-#info-text {
+.info-text {
   font-family: "Plus Jakarta Sans", sans-serif;
   font-weight: normal;
   font-size: 14px;

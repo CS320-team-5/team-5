@@ -189,8 +189,8 @@ const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.
       <div id="form-section">
         <div id="form-container">
           <div id="start-cart-header">
-            <div id="start-cart-title">Start a Cart</div>
-            <div className="general-text">Set up a shared order so neighbors can add to your cart.</div>
+            <div id="page-title">Start a Cart</div>
+            <div className="info-text">Set up a shared order so others can add to your cart.</div>
           </div>
           <div>
             <form action="" method="get" id="cart-form" onSubmit={handleFormSubmit}>
@@ -332,8 +332,8 @@ const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.
                 </div>
                 <div id="notice-section">
                   <span><img src="/piggy_bank.svg" /></span>
-                  <div className="general-text">
-                    Future cart participants need to add <span id="diff-text">${Math.max(0,Number(priceValues.targetMin) - Number(priceValues.initValue)).toFixed(2)}</span> to reach the delivery minimum
+                  <div className="info-text">
+                    Future cart participants need to add <span id="diff-text">${Math.max(0,Number(priceValues.targetMin) - Number(priceValues.initValue)).toFixed(2)}</span> to reach minimum
                   </div>
                 </div>
               </div>
@@ -344,7 +344,7 @@ const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.
                 <input
                   type="text" id="location-input" name="location-input"
                   list="prev-locations" placeholder="Type or select..." required
-                  className="general-text"
+                  className="info-text"
                 />
 
                 <datalist id="prev-locations">
@@ -370,7 +370,7 @@ const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.
               <div id="notes-section">
                 <label htmlFor="notes-input" className="form-text">5. Notes (Optional)</label>
                 <input
-                  type="text" id="notes-input" name="notes-input" maxLength={500} className="general-text"
+                  type="text" id="notes-input" name="notes-input" maxLength={500} className="info-text"
                   placeholder="e.g. Ordering one large pizza, will text when courier arrives"
                 />
               </div>{submitError && <p role="alert">{submitError}</p>}{submitSuccess && <p role="status">{submitSuccess}</p>}
