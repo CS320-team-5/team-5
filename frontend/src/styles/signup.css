@@ -17,6 +17,34 @@
   font-weight: 700;
 }
 
+.signup-page #left-banner-part {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.signup-page #logo-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #00855B;
+}
+
+.signup-page .signup-header{
+  align-items: center;
+}
+
+.signup-page .signup-header span {
+  font-family: "Outfit", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+}
+
+.signup-page #logo-title {
+  font-size: 22px;
+  color: #00855B;
+}
+
 .signup-page .brand-dot {
   color: #166534;
 }
@@ -151,6 +179,7 @@
 
 .signup-page .login-link span {
   color: #166534;
+  text-decoration-color: #166534;
   cursor: pointer;
 }
 
@@ -169,4 +198,9 @@
   text-align: center;
   padding: 24px;
   color: #64748b;
+}
+
+
+.login-button {
+  color: #166534;
 }

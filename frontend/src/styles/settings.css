@@ -16,6 +16,11 @@
   font-size: 2.4rem;
 }
 
+.settings-layout h2 {
+  margin: 8px 0;
+  font-size: 1.5rem;
+}
+
 .settings-subtitle {
   color: #6b7280;
 }
@@ -28,6 +33,7 @@
 
 .status-pill {
   background: white;
+  color: #2f6f4e;
   padding: 12px 18px;
   border-radius: 14px;
   font-weight: 600;
@@ -50,6 +56,7 @@
   border-radius: 20px;
   padding: 28px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  font-weight: 500;
 }
 
 .card-header {
@@ -162,12 +169,13 @@
 
 .stat-card span {
   color: #6b7280;
-  font-size: 0.85rem;
+  font-size: 1rem;
+  font-weight: 600;
 }
 
 .stat-card h3 {
   margin: 8px 0 0;
-  font-size: 2rem;
+  font-size: 1.5rem;
 }
 
 .toggle-row {
@@ -203,6 +211,7 @@
   justify-content: space-between;
 }
 
+
 .text-button,
 .delete-button {
   border: none;
@@ -212,6 +221,12 @@
 
 .delete-button {
   color: #c0392b;
+}
+
+.save-button,
+.text-button,
+.delete-button {
+  font-weight: 500;
 }
 
 @media (max-width: 900px) {
