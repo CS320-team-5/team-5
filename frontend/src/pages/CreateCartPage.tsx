@@ -191,7 +191,7 @@ const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.
         <nav id="center-banner-part" aria-label="Dashboard navigation">
           <Link className="banner-button" to="/dashboard" aria-current="page">Browse Carts</Link>
           <button className="banner-button" type="button">Start a Cart</button>
-          <button className="banner-button" type="button">Messages</button>
+          <Link className="banner-button" to="/messages" aria-current="page">Messages</Link>
         </nav>
         <div id="right-banner-part">
           <button className="pill" type="button">
