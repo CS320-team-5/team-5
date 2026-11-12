@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Path
 
-from services import statistics_service
+from app.services import statistics_service
 
-from models.statistics import (
+from app.models.statistics import (
     StatisticsUserResponse,
     StatisticsCartResponse,
     StatisticsStoreResponse,
@@ -46,7 +46,7 @@ def get_cart_statistics(
     cart_id: int = Path(..., gt=0),
     user_id: int = Path(..., gt=0)
 ):
-    return statistics_service.get_cart_statistics(
+    return statistics_service.get_user_cart_statistics(
         user_id=user_id,
         cart_id=cart_id
     )

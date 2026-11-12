@@ -5,15 +5,15 @@ from postgrest.exceptions import APIError
 import pandas as pd
 import numpy as np
 
-from repositories.statistics_repository import (
+from app.repositories.statistics_repository import (
     get_users_table,
     get_review_table,
     get_cart_participants_table,
-    get_store_table,
+    get_stores_table,
     get_carts_table,
 )
 
-from models.statistics import (
+from app.models.statistics import (
     StatisticsUserResponse,
     StatisticsCartResponse,
     StatisticsStoreResponse,
@@ -191,7 +191,7 @@ def total_number_of_locations_per_enterprise(
 ) -> int:
     """Count the store records belonging to an enterprise."""
     try:
-        storeTable = get_store_table(enterprise_name)
+        storeTable = get_stores_table(enterprise_name)
         df = to_dataframe(storeTable)
 
         if df.empty:
