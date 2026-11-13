@@ -1,11 +1,15 @@
 import { Link } from "react-router";
-import theme from "../styles/theme.module.css";
+import "../styles/theme.css";
+import { ShoppingBasket } from "lucide-react";
 
-export default function Banner() {
+/**
+ * Banner appearing on the Active Carts, Cart Creation, Messaging, and Settings pages
+ */
+function Banner() {
   return (
     <header id="banner">
-      <Link id="left-banner-part" to="/" aria-label="CoCart home">
-        <img src="/hero_logo.svg" />
+      <Link id="left-banner-part" to="/" aria-label="Co-Cart home">
+        <ShoppingBasket color="var(--primary-green)"/>
         <span id="logo-title">Co-Cart</span>
       </Link>
       <nav id="center-banner-part" aria-label="Dashboard navigation">
@@ -13,12 +17,16 @@ export default function Banner() {
         <Link className="banner-button" to="/create" aria-current="page">Start a Cart</Link>
         <Link className="banner-button" to="/messages" aria-current="page">Messages</Link>
       </nav>
-      <div id="right-banner-part">
-        <button className="account-pill" type="button">
+      <Link 
+        id="right-banner-part" to="/settings" 
+        aria-current="page" aria-label="Account Settings" 
+        className="account-pill" type="button"
+      >
           <span className="account-initials">ML</span>
           <span className="name">Maya (Building 4)</span>
-        </button>
-      </div>
+      </Link>
     </header>
   );
 }
+
+export default Banner

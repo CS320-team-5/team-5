@@ -1,5 +1,6 @@
-import { Link } from "react-router";
 import '../styles/createcart.css';
+import '../styles/theme.css';
+import Banner from '../components/Banner';
 import { useEffect, useState } from "react";
 import { createCart } from "../services/cart";
 import { createStore, type StoreInput } from "../services/store";
@@ -183,28 +184,13 @@ const storeSearch = storeName.trim().toLowerCase();
 const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.enterprisename.toLowerCase().includes(storeSearch)).slice(0, 5) : [];
   return (
     <main id="create-cart-page">
-      <header id="banner">
-        <Link id="left-banner-part" to="/" aria-label="CoCart home">
-          <img src="/hero_logo.svg" />
-          <span id="logo-title">Co-Cart</span>
-        </Link>
-        <nav id="center-banner-part" aria-label="Dashboard navigation">
-          <Link className="banner-button" to="/dashboard" aria-current="page">Browse Carts</Link>
-          <button className="banner-button" type="button">Start a Cart</button>
-          <Link className="banner-button" to="/messages" aria-current="page">Messages</Link>
-        </nav>
-        <div id="right-banner-part">
-          <button className="pill" type="button">
-            <span className="initials">ML</span>
-            <span className="name">Maya (Building 4)</span>
-          </button>
-        </div>
-      </header>
+      <Banner />
+      <br /><br />
       <div id="form-section">
         <div id="form-container">
           <div id="start-cart-header">
-            <div id="start-cart-title">Start a Cart</div>
-            <div className="general-text">Set up a shared order so neighbors can add to your cart.</div>
+            <div id="page-title">Start a Cart</div>
+            <div className="info-text">Set up a shared order so others can add to your cart.</div>
           </div>
           <div>
             <form action="" method="get" id="cart-form" onSubmit={handleFormSubmit}>
@@ -346,8 +332,8 @@ const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.
                 </div>
                 <div id="notice-section">
                   <span><img src="/piggy_bank.svg" /></span>
-                  <div className="general-text">
-                    Future cart participants need to add <span id="diff-text">${Math.max(0,Number(priceValues.targetMin) - Number(priceValues.initValue)).toFixed(2)}</span> to reach the delivery minimum
+                  <div className="info-text">
+                    Future cart participants need to add <span id="diff-text">${Math.max(0,Number(priceValues.targetMin) - Number(priceValues.initValue)).toFixed(2)}</span> to reach minimum
                   </div>
                 </div>
               </div>
@@ -358,7 +344,7 @@ const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.
                 <input
                   type="text" id="location-input" name="location-input"
                   list="prev-locations" placeholder="Type or select..." required
-                  className="general-text"
+                  className="info-text"
                 />
 
                 <datalist id="prev-locations">
@@ -384,7 +370,7 @@ const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.
               <div id="notes-section">
                 <label htmlFor="notes-input" className="form-text">5. Notes (Optional)</label>
                 <input
-                  type="text" id="notes-input" name="notes-input" maxLength={500} className="general-text"
+                  type="text" id="notes-input" name="notes-input" maxLength={500} className="info-text"
                   placeholder="e.g. Ordering one large pizza, will text when courier arrives"
                 />
               </div>{submitError && <p role="alert">{submitError}</p>}{submitSuccess && <p role="status">{submitSuccess}</p>}

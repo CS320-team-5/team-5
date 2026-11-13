@@ -1,0 +1,50 @@
+
+from pydantic import BaseModel, ConfigDict, Field
+
+
+# ==========================================
+# USER STATISTICS
+# ==========================================
+
+class StatisticsUserResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    user_id: int = Field(gt=0)
+    total_spending: float = Field(ge=0)
+    average_contribution: float | None = None
+    average_rating: float | None = None
+
+
+# ==========================================
+# CART STATISTICS
+# ==========================================
+
+class StatisticsCartResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    cart_id: int = Field(gt=0)
+    user_id: int = Field(gt=0)
+    total_contribution: float = Field(ge=0)
+
+
+# ==========================================
+# STORE STATISTICS
+# ==========================================
+
+class StatisticsStoreResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    store_id: int = Field(gt=0)
+    total_open_carts: int = Field(ge=0)
+    total_spending: float = Field(ge=0)
+
+
+# ==========================================
+# ENTERPRISE STATISTICS
+# ==========================================
+
+class StatisticsEnterpriseResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    enterprise_name: str
+    total_locations: int = Field(ge=0)

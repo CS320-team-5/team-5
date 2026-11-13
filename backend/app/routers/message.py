@@ -2,9 +2,15 @@ from fastapi import APIRouter, Depends, Path, Query, Response
 
 from ..dependencies.auth import AuthSession, get_auth_session
 from ..models.message import Message, MessageCreate, MessageUpdate
+from ..models.cart import Cart
 from ..services import message as service
 
 router = APIRouter(prefix="/api/message", tags=["Message"])
+
+
+@router.get("/carts", response_model=list[Cart])
+def get_message_carts(session: AuthSession = Depends(get_auth_session)):
+    return service.get_message_carts(session)
 
 
 @router.get("/cart/{cart_id}", response_model=list[Message])

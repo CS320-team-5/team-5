@@ -24,7 +24,7 @@ test('clicking nav links changes the page', async () => {
   expect(window.location.pathname).toBe('/dashboard')
   expect(screen.getByText('Active Community Carts')).toBeTruthy()
 
-  await user.click(screen.getByLabelText('CoCart home'))
+  await user.click(screen.getByLabelText('Co-Cart home'))
   expect(window.location.pathname).toBe('/')
   expect(screen.getByText('Meet the delivery minimum, together.')).toBeTruthy()
 })
@@ -43,7 +43,7 @@ test('back button goes to the previous page', async () => {
 
 test.each([
   ['/dashboard', 'Active Community Carts'],
-  ['/messages', "Trader Joe's Cart · Main Building Lobby"],
+  ['/messages', 'Select a cart conversation'],
   ['/signup', 'Create Account'],
 ])('loading %s directly shows the right page', (url, expected) => {
   window.history.replaceState(null, '', url)
@@ -51,39 +51,11 @@ test.each([
   expect(screen.getByRole('heading', { name: expected })).toBeTruthy()
 })
 
-test('dashboard messages link opens a chat that can send messages', async () => {
+test('dashboard messages link opens cart conversation selection', async () => {
   const user = userEvent.setup()
   window.history.replaceState(null, '', '/dashboard')
   renderApp()
-
   await user.click(screen.getByRole('link', { name: 'Messages' }))
   expect(window.location.pathname).toBe('/messages')
-  expect(screen.getByRole('button', { name: 'Send' }).disabled).toBe(true)
-
-  await user.type(screen.getByRole('textbox', { name: 'Message' }), '  Heading down!  {Enter}')
-  expect(screen.getByRole('log').textContent).toContain('Heading down!')
-  expect(screen.getByRole('textbox', { name: 'Message' }).value).toBe('')
-
-  await user.click(screen.getByRole('button', { name: 'Sent Venmo ✓' }))
-  expect(screen.getByRole('log').textContent).toContain('Sent Venmo ✓')
-})
-
-test('switching carts keeps messages and drafts separate', async () => {
-  const user = userEvent.setup()
-  window.history.replaceState(null, '', '/messages')
-  renderApp()
-
-  expect(screen.queryByText(/Cart Split|Who Paid|Carlos M\.|Direct ·/)).toBeNull()
-  const input = screen.getByRole('textbox', { name: 'Message' })
-  await user.type(input, 'Grocery draft')
-  await user.click(screen.getByRole('button', { name: /Chipotle Run/ }))
-  expect(input.value).toBe('')
-  const members = within(screen.getByRole('region', { name: "Who's in this cart" }))
-  expect(members.getAllByRole('listitem')).toHaveLength(2)
-  await user.type(input, 'Chipotle only{Enter}')
-  expect(screen.getByRole('log').textContent).toContain('Chipotle only')
-
-  await user.click(screen.getByRole('button', { name: /Trader Joe's Cart/ }))
-  expect(input.value).toBe('Grocery draft')
-  expect(screen.getByRole('log').textContent).not.toContain('Chipotle only')
+  expect(screen.getByRole('heading', { name: 'Select a cart conversation' })).toBeTruthy()
 })

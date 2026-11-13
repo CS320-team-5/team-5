@@ -11,7 +11,7 @@
 }
 
 /* rule for page background/general details */
-#create-cart-page {
+#page-structure {
   background-color: var(--page-bg-color);
   min-height: 100vh;
   padding: 16px 24px;
@@ -80,8 +80,8 @@
   background: none;
   text-align: center;
   text-decoration: none;
-  color: inherit;
   cursor: pointer;
+  color: var(--general-text-color);
 }
 .banner-button:hover {
   background: var(--primary-green);
@@ -98,7 +98,10 @@
   border-radius: 9999px;
   background: #fff;
   cursor: pointer;
-  font-family: "Plus Jakarta Sans", sans-serif;
+  font-family: var(--general-font);
+  font-size: 16px;
+  text-decoration: none;
+  color: var(--general-text-color);
 }
 .account-pill:hover {
   background: #f5f6f8;
@@ -134,17 +137,13 @@
 }
 
 /* summary/info text -- general information */
-#info-text {
+.info-text {
   font-family: "Plus Jakarta Sans", sans-serif;
   font-weight: normal;
   font-size: 14px;
   color: var(--general-text-color);
 }
-
-
-.small-text {
-  font-family: "Plus Jakarta Sans", sans-serif;
+/* can use this alongside info text to make smaller text */
+.small-font {
   font-size: 12px;
-  color: var(--general-text-color);
-  font-weight: bold;
 }
