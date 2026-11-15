@@ -1,5 +1,5 @@
 import '../styles/createcart.css';
-import '../styles/theme.css';
+import theme from '../styles/theme.module.css';
 import Banner from '../components/Banner';
 import { useEffect, useState } from "react";
 import { createCart } from "../services/cart";
@@ -13,7 +13,6 @@ type StoreOption = {
 export function CreateCartPage() {
   const d = new Date();
   /** Simply accepts a number, turns it into a string, and pads the start with 0s */
-  const format = (n: number): string => n.toString().padStart(2, '0');
   // getFullYear because getYear is deprecated
   // getMonth+1 because getMonth is 0-based
   // getDate because getDay gets you the DAY OF THE WEEK
@@ -189,8 +188,8 @@ const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.
       <div id="form-section">
         <div id="form-container">
           <div id="start-cart-header">
-            <div id="page-title">Start a Cart</div>
-            <div className="info-text">Set up a shared order so others can add to your cart.</div>
+            <div className={theme["page-title"]}>Start a Cart</div>
+            <div className={theme["info-text"]}>Set up a shared order so others can add to your cart.</div>
           </div>
           <div>
             <form action="" method="get" id="cart-form" onSubmit={handleFormSubmit}>
@@ -203,7 +202,7 @@ const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.
                     value={storeName}
                     maxLength={20}
                     placeholder="Search or enter a store name"
-                    className="general-text"
+                    className={theme["info-text"]}
                     required
                     disabled={isAddingStore}
                     onChange={(event) => {
@@ -305,7 +304,7 @@ const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.
               <div className="form-text" id="price-section">
                 2. Order Minimum & Your Share
                 <div id="price-container">
-                  <div className="small-text">
+                  <div className={theme["small-text"]}>
                     <label htmlFor="threshold">Target Minimum</label>
                     <div className="general-container">
                       <span className="price-text">$</span>
@@ -317,7 +316,7 @@ const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.
                       />
                     </div>
                   </div>
-                  <div className="small-text" style={{"gap": 4}}>
+                  <div className={theme["small-text"]} style={{"gap": 4}}>
                     <label htmlFor="start_amount">What you're spending</label>
                     <div className="general-container">
                       <span className="price-text">$</span>
@@ -332,7 +331,7 @@ const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.
                 </div>
                 <div id="notice-section">
                   <span><img src="/piggy_bank.svg" /></span>
-                  <div className="info-text">
+                  <div className={theme["info-text"]}>
                     Future cart participants need to add <span id="diff-text">${Math.max(0,Number(priceValues.targetMin) - Number(priceValues.initValue)).toFixed(2)}</span> to reach minimum
                   </div>
                 </div>
@@ -344,7 +343,7 @@ const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.
                 <input
                   type="text" id="location-input" name="location-input"
                   list="prev-locations" placeholder="Type or select..." required
-                  className="info-text"
+                  className={theme["info-text"]}
                 />
 
                 <datalist id="prev-locations">
@@ -357,7 +356,7 @@ const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.
                 </datalist>
                 <div id="safety-container">
                   <span><img src="/lock.svg" /></span>
-                  <div className="small-text">Safety consideration: choose a public location to keep private addresses private.</div>
+                  <div className={theme["small-text"]}>Safety consideration: choose a public location to keep private addresses private.</div>
                   </div>
               </div>
               <div id="deadline-section">
@@ -370,7 +369,7 @@ const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.
               <div id="notes-section">
                 <label htmlFor="notes-input" className="form-text">5. Notes (Optional)</label>
                 <input
-                  type="text" id="notes-input" name="notes-input" maxLength={500} className="info-text"
+                  type="text" id="notes-input" name="notes-input" maxLength={500} className={theme["info-text"]}
                   placeholder="e.g. Ordering one large pizza, will text when courier arrives"
                 />
               </div>{submitError && <p role="alert">{submitError}</p>}{submitSuccess && <p role="status">{submitSuccess}</p>}
