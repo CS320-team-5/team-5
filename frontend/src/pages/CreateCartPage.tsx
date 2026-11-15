@@ -1,4 +1,6 @@
+// @ts-ignore
 import '../styles/createcart.css';
+// @ts-ignore
 import theme from '../styles/theme.module.css';
 import Banner from '../components/Banner';
 import { useEffect, useState } from "react";

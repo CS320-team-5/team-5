@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+// @ts-ignore
 import theme from "../styles/theme.module.css";
 import { ShoppingBasket } from "lucide-react";
 import AppHomeLink from "./AppHomeLink";

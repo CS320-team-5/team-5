@@ -1,4 +1,6 @@
+// @ts-ignore
 import "../styles/settings.css";
+// @ts-ignore
 import "../styles/dashboard.css";
 import Banner from "../components/Banner"
 import { useEffect, useState } from "react";

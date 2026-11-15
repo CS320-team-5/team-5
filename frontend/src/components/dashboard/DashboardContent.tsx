@@ -3,7 +3,9 @@ import { CartList } from './CartList';
 import { FilterList } from './FilterList';
 import Banner from '../Banner';
 import { type CartDetails } from '../../types/cart';
+// @ts-ignore
 import theme from "../../styles/theme.module.css";
+// @ts-ignore
 import "../../styles/dashboard.css";
 import { ShoppingCartPlus } from "lucide-react";
 

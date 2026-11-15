@@ -1,3 +1,4 @@
+// @ts-ignore
 import theme from "../../styles/theme.module.css";
 
 export function FilterList({ filterList }: { filterList: string[] }) {

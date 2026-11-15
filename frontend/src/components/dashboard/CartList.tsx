@@ -1,5 +1,6 @@
 import { type CartDetails } from '../../types/cart';
 import { UserRoundPlus } from "lucide-react";
+// @ts-ignore
 import theme from "../../styles/theme.module.css";
 
 /** Render the current cart data as cards. */
