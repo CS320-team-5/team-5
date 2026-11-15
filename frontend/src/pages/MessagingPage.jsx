@@ -162,18 +162,8 @@ function MessagingPage() {
 
   return (
     <div className="dashboard-page messaging-page">
-      <header id="banner">
-        <AppHomeLink label="CoCart home">
-          <ShoppingBasket className="brand-icon" size={32} aria-hidden="true" />
-          <span id="logo-title">Co-Cart</span>
-        </AppHomeLink>
-        <nav id="center-banner-part" aria-label="Main navigation">
-          <Link className="banner-button" to="/dashboard">Browse Carts</Link>
-          <Link className="banner-button" to="/create">Start a Cart</Link>
-          <Link className="banner-button" to="/messages" aria-current="page">Messages</Link>
-        </nav>
-        <div id="right-banner-part"><span className="pill">{profile?.name || 'CoCart'}</span></div>
-      </header>
+      <Banner />
+
       <main>
         {cart && <section className="cart-cell order-summary">
           <div>
