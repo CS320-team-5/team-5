@@ -1,5 +1,6 @@
 import { type CartDetails } from '../../types/cart';
 import { UserRoundPlus } from "lucide-react";
+import theme from "../../styles/theme.module.css";
 
 /** Render the current cart data as cards. */
 export function CartList({ cartList }: { cartList: CartDetails[] }) {
@@ -27,7 +28,7 @@ export function CartList({ cartList }: { cartList: CartDetails[] }) {
         <div className="details-row">
           <div>
             <div className="store-title">{cartDetails.store}</div>
-            <div className="info-text small-font">{cartDetails.pickupLocation}</div>
+            <div className={`${theme["info-text"]} ${theme["small-font"]}`}>{cartDetails.pickupLocation}</div>
           </div>
           <div className="spots-left-text" style={oneSpotLeft ? {color: "#B5260B"} : undefined}>
             {cartDetails.openSpots} {!oneSpotLeft ? "spots open" : "spot open!"}

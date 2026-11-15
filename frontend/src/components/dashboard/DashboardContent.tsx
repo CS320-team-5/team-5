@@ -3,13 +3,13 @@ import { CartList } from './CartList';
 import { FilterList } from './FilterList';
 import Banner from '../Banner';
 import { type CartDetails } from '../../types/cart';
-import "../../styles/theme.css";
+import theme from "../../styles/theme.module.css";
 import "../../styles/dashboard.css";
 import { ShoppingCartPlus } from "lucide-react";
 
 export function DashboardContent({ cartList, filterList }: { cartList: CartDetails[], filterList: string[], }) {
   return (
-    <div className="theme dashboard-page">
+    <div className="dashboard-page">
       <Banner />
       <br /><br />
       <main>
@@ -20,12 +20,12 @@ export function DashboardContent({ cartList, filterList }: { cartList: CartDetai
               LIVE ORDERING
             </div>
           </div>
-          <h1 id="page-title">Active Community Carts</h1>
+          <h1 className={theme["page-title"]}>Active Community Carts</h1>
           <div id="summary-and-btn">
-            <div className="info-text">
+            <div className={theme["info-text"]}>
               Find a nearby group order to hit free delivery minimums and split costs.
             </div>
-            <Link id="start-cart-button" className="info-text" to="/create" aria-current="page">
+            <Link id="start-cart-button" className={theme["info-text"]} to="/create" aria-current="page">
               <ShoppingCartPlus size={16} /> Start a Cart
             </Link>
           </div>
