@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import "../styles/theme.css";
+import theme from "../styles/theme.module.css";
 import { ShoppingBasket } from "lucide-react";
 import AppHomeLink from "./AppHomeLink";
 
@@ -62,36 +62,36 @@ function Banner() {
     (nameParts.length > 1 ? nameParts[nameParts.length - 1][0] : "")
   ).toUpperCase();
   return (
-    <header id="banner">
-      <AppHomeLink label="Co-Cart home">
+    <header className={theme["banner"]}>
+      <Link className={theme["left-banner-part"]} to="/" aria-label="Co-Cart home">
         <ShoppingBasket color="var(--primary-green)"/>
-        <span id="logo-title">Co-Cart</span>
-      </AppHomeLink>
-      <nav id="center-banner-part" aria-label="Dashboard navigation">
-        <Link className="banner-button" to="/dashboard" aria-current="page">Browse Carts</Link>
-        <Link className="banner-button" to="/create" aria-current="page">Start a Cart</Link>
-        <Link className="banner-button" to="/messages" aria-current="page">Messages</Link>
+        <span className={theme["logo-title"]}>Co-Cart</span>
+      </Link>
+      <nav className={theme["center-banner-part"]} aria-label="Dashboard navigation">
+        <Link className={theme["banner-button"]} to="/dashboard" aria-current="page">Browse Carts</Link>
+        <Link className={theme["banner-button"]} to="/create" aria-current="page">Start a Cart</Link>
+        <Link className={theme["banner-button"]} to="/messages" aria-current="page">Messages</Link>
       </nav>
       {profileStatus === "loading" ? (
-        <div id="right-banner-part" className="account-pill" role="status">
-          Loading account…
+        <div className={`${theme["right-banner-part"]} ${theme["account-pill"]}`} role="status">
+          Loading account...
         </div>
       ) : profileStatus === "error" ? (
         <Link
-          id="right-banner-part" to="/settings" className="account-pill">
+          className={`${theme["right-banner-part"]} ${theme["account-pill"]}`} to="/settings">
           Account
         </Link>
       ) : profile ? (
         <Link
-          id="right-banner-part" to="/settings" aria-label="Account Settings" className="account-pill">
-          <span className="account-initials" aria-hidden="true">
+          className={`${theme["right-banner-part"]} ${theme["account-pill"]}`} to="/settings" aria-label="Account Settings">
+          <span className={theme["account-initials"]} aria-hidden="true">
             {initials}
           </span>
-          <span className="name">{displayName}</span>
+          <span className={theme["name"]}>{displayName}</span>
         </Link>
       ) : (
         <Link
-          id="right-banner-part" to="/login" className="account-pill">
+          className={`${theme["right-banner-part"]} ${theme["account-pill"]}`} to="/login">
           Log In
         </Link>
       )}
