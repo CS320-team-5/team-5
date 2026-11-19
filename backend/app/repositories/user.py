@@ -9,7 +9,7 @@ def get_user(db: Client, user_id: int) -> dict | None:
 
     rows = (
         db.table("users")
-        .select(PUBLIC_USER_COLUMNS)
+        .select(f"{PUBLIC_USER_COLUMNS},deleted_at")
         .eq("userid", user_id)
         .limit(1)
         .execute()
@@ -29,4 +29,10 @@ def update_user(db: Client, user_id: int, changes: dict) -> dict | None:
         .execute()
         .data
     )
+    return rows[0] if rows else None
+
+def get_public_user(db: Client, user_id: int) -> dict | None:
+    rows = db.rpc(
+        "get_public_user_profile", {"p_userid": user_id}
+    ).execute().data
     return rows[0] if rows else None

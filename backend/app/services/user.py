@@ -52,9 +52,13 @@ def get_user(db: Client, user_id: int) -> UserPublic:
 
     if row is None:
         raise HTTPException(status_code=404, detail="User not found")
-
+    if row.get("deleted_at") is not None:
+        return UserPublic(
+            userid=row["userid"],
+            name="Deleted User",
+            location=None,
+    )
     return UserPublic.model_validate(row)
-
 
 def update_user(
     db: Client,
@@ -70,6 +74,17 @@ def update_user(
 
     try:
         row = user_repository.update_user(db, user_id, changes)
+    except (APIError, RequestError) as error:
+        _raise_database_error(error)
+
+    if row is None:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    return UserPublic.model_validate(row)
+
+def get_public_user(db: Client, user_id: int) -> UserPublic:
+    try:
+        row = user_repository.get_public_user(db, user_id)
     except (APIError, RequestError) as error:
         _raise_database_error(error)
 
