@@ -1,8 +1,76 @@
 import "../styles/settings.css";
 import "../styles/dashboard.css";
 import Banner from "../components/Banner"
+import { useEffect, useState } from "react";
+import { supabase } from "../lib/supabase";
+
+type UserRecord = {
+  userid: number;
+  name: string;
+  email: string;
+  location: string;
+  authid: string;
+};
 
 export default function SettingsPage() {
+  const [user, setUser] = useState<UserRecord | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const {
+          data: { user: authUser },
+        } = await supabase.auth.getUser();
+
+        if (!authUser) {
+          setLoading(false);
+          return;
+        }
+
+        const { data, error } = await supabase
+          .from("users")
+          .select("*")
+          .eq("authid", authUser.id)
+          .single();
+
+        if (error) {
+          throw error;
+        }
+
+        setUser(data);
+      } catch (err) {
+        console.error("Failed to load user:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadUser();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="dashboard-page">
+        <Banner />
+        <div className="settings-page">
+          <p>Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="dashboard-page">
+        <Banner />
+        <div className="settings-page">
+          <p>No user profile found.</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="dashboard-page">
     <Banner />
@@ -36,18 +104,22 @@ export default function SettingsPage() {
               <div className="profile-avatar">📷</div>
 
               <div>
-                <h3>Maya Lin</h3>
+                <h3>{user.name}</h3>
                 <p>Member since October 2023</p>
 
                 <div className="address-pill">
-                  Brooklyn, NY
+                  {user.location}
                 </div>
               </div>
             </div>
 
             <div className="form-group">
               <label>Full Name</label>
-              <input type="text" value="Maya Lin" readOnly />
+              <input
+                type="text"
+                value={user.name}
+                readOnly
+              />
             </div>
 
             <div className="two-column">
@@ -55,7 +127,7 @@ export default function SettingsPage() {
                 <label>Email Address</label>
                 <input
                   type="email"
-                  value="maya.lin@example.com"
+                  value={user.email}
                   readOnly
                 />
               </div>

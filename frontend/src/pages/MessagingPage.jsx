@@ -18,17 +18,18 @@ function MessagingPage() {
   const [carts, setCarts] = useState([])
   const [profile, setProfile] = useState(null)
   const [members, setMembers] = useState([])
-  const [messages, setMessages] = useState([])
+  // Chat data is keyed by cart so responses for cart A cannot appear in cart B.
+  const [messagesByCart, setMessagesByCart] = useState({})
   const [names, setNames] = useState({})
   const [drafts, setDrafts] = useState({})
   const [loadingCarts, setLoadingCarts] = useState(true)
   const [loadingChat, setLoadingChat] = useState(false)
   const [error, setError] = useState('')
   const [chatError, setChatError] = useState('')
-  const [sending, setSending] = useState(false)
   const messageList = useRef(null)
   const cart = carts.find(item => item.cartid === selectedId)
   const draft = drafts[selectedId] ?? ''
+  const messages = messagesByCart[selectedId] ?? []
   const canSend = isOpen(cart)
   const percentage = cart?.minimumamount ? Math.round(Number(cart.currentamount) / Number(cart.minimumamount) * 100) : 0
 
@@ -45,7 +46,6 @@ function MessagingPage() {
   }, [])
 
   useEffect(() => {
-    setMessages([])
     setMembers([])
     setChatError('')
     if (!validId || loadingCarts || !cart) return
@@ -54,7 +54,19 @@ function MessagingPage() {
     const refresh = async () => {
       try {
         const received = await getCartMessages(selectedId)
-        if (active) { setMessages(received); setChatError('') }
+        if (active) {
+          // Retain pending/failed local messages, and confirmed sends that a
+          // concurrent/older poll hasn't returned yet.
+          setMessagesByCart(previous => {
+            const existing = previous[selectedId] ?? []
+            const receivedIds = new Set(received.map(message => message.messageid))
+            const local = existing.filter(message =>
+              message.localStatus || !receivedIds.has(message.messageid)
+            )
+            return { ...previous, [selectedId]: [...received, ...local] }
+          })
+          setChatError('')
+        }
       } catch (reason) { if (active) setChatError(reason.message) }
       finally { if (active) setLoadingChat(false) }
     }
@@ -83,17 +95,66 @@ function MessagingPage() {
 
   function setDraft(text) { setDrafts(previous => ({ ...previous, [selectedId]: text })) }
 
-  async function sendMessage(text) {
+  async function sendMessage(text, clearDraft = false) {
     const trimmed = text.trim()
-    if (!trimmed || !canSend || sending || loadingChat) return
-    setSending(true)
+    if (!trimmed || !canSend || loadingChat || !validId) return
+
+    // Capture the cart at submission time: navigation must not redirect this POST.
+    const targetCartId = selectedId
+    const temporaryId = `pending-${crypto.randomUUID()}`
+    const optimistic = {
+      messageid: temporaryId,
+      cartid: targetCartId,
+      userid: profile?.userid,
+      messagetext: trimmed,
+      timestamp: new Date().toISOString(),
+      localStatus: 'pending',
+    }
+
+    // Clear only what was submitted, immediately, not when the request completes.
+    // Quick replies do not disturb a draft the user is typing.
+    if (clearDraft) {
+      setDrafts(previous => ({ ...previous, [targetCartId]: '' }))
+    }
     setChatError('')
+    setMessagesByCart(previous => ({
+      ...previous,
+      [targetCartId]: [...(previous[targetCartId] ?? []), optimistic],
+    }))
+
     try {
-      const saved = await sendCartMessage(selectedId, trimmed)
-      setMessages(previous => previous.some(message => message.messageid === saved.messageid) ? previous : [...previous, saved])
-      setDrafts(previous => ({ ...previous, [selectedId]: '' }))
-    } catch (reason) { setChatError(reason.message) }
-    finally { setSending(false) }
+      const saved = await sendCartMessage(targetCartId, trimmed)
+      setMessagesByCart(previous => {
+        const withoutTemporary = (previous[targetCartId] ?? [])
+          .filter(message => message.messageid !== temporaryId)
+        const alreadyPresent = withoutTemporary.some(message => message.messageid === saved.messageid)
+        return {
+          ...previous,
+          [targetCartId]: alreadyPresent ? withoutTemporary : [...withoutTemporary, saved],
+        }
+      })
+    } catch (reason) {
+      setMessagesByCart(previous => ({
+        ...previous,
+        [targetCartId]: (previous[targetCartId] ?? []).map(message =>
+          message.messageid === temporaryId
+            ? { ...message, localStatus: 'failed', failureReason: reason.message }
+            : message
+        ),
+      }))
+    }
+  }
+
+  function retryMessage(message) {
+    const targetCartId = message.cartid
+    if (targetCartId !== selectedId || !canSend) return
+    setMessagesByCart(previous => ({
+      ...previous,
+      [targetCartId]: (previous[targetCartId] ?? []).filter(
+        item => item.messageid !== message.messageid
+      ),
+    }))
+    sendMessage(message.messagetext)
   }
 
   const memberIds = new Set([cart?.owneruserid, ...members.map(member => member.userid)].filter(Boolean))
@@ -167,7 +228,6 @@ function MessagingPage() {
             </div></div>
             {!loadingCarts && routeId && (!validId || !cart) && !error && <p role="alert">This cart conversation is not available to your account.</p>}
             {chatError && <p role="alert">{chatError}</p>}
-            {loadingChat && <p role="status">Loading messages…</p>}
             <div className="message-list" role="log" aria-labelledby="chat-title" tabIndex={0} ref={messageList}>
               {cart && !loadingChat && !chatError && messages.length === 0 && <p>No messages yet. Say hello to your cart!</p>}
               {cart && messages.map(message => {
@@ -178,17 +238,22 @@ function MessagingPage() {
                   <div className="message-content">
                     <small className="message-meta"><strong>{name}</strong> {formatTime(message.timestamp)}</small>
                     <p className="message-bubble">{message.messagetext}</p>
+                    {message.localStatus === 'pending' && <small>Sending…</small>}
+                    {message.localStatus === 'failed' && <small role="alert">
+                      Not sent: {message.failureReason || 'Request failed.'}{' '}
+                      <button type="button" onClick={() => retryMessage(message)}>Retry</button>
+                    </small>}
                   </div>
                 </div>
               })}
             </div>
             {cart && canSend && <>
               <div className="quick-replies"><small>Quick:</small>
-                {['Heading down now', "I'm in the lobby"].map(reply => <button className="filter-button" key={reply} type="button" disabled={sending || loadingChat} onClick={() => sendMessage(reply)}>{reply}</button>)}
+                {['Heading down now', "I'm in the lobby"].map(reply => <button className="filter-button" key={reply} type="button" disabled={loadingChat} onClick={() => sendMessage(reply)}>{reply}</button>)}
               </div>
-              <form className="composer" onSubmit={event => { event.preventDefault(); sendMessage(draft) }}>
+              <form className="composer" onSubmit={event => { event.preventDefault(); sendMessage(draft, true) }}>
                 <input aria-label="Message" placeholder={`Message Cart #${cart.cartid}…`} maxLength={2000} value={draft} onChange={event => setDraft(event.target.value)} />
-                <button className="join-button" type="submit" disabled={!draft.trim() || sending || loadingChat}>Send <Send size={16} aria-hidden="true" /></button>
+                <button className="join-button" type="submit" disabled={!draft.trim() || loadingChat}>Send <Send size={16} aria-hidden="true" /></button>
               </form>
             </>}
             {cart && !canSend && <p>This cart is closed. Previous messages remain available.</p>}

@@ -1,4 +1,5 @@
 import { getSession } from "./auth";
+import type { CartDetails } from "../types/cart";
 
 export type CreateCartInput = {
   storeid: number;
@@ -43,4 +44,40 @@ export async function createCart(
     throw new Error(message);
   }
   return data;
+}
+
+
+export type ApiCart = {
+  cartid: number;
+  storeid: number;
+  owneruserid: number;
+  location: string | null;
+  deadline: string;
+  minimumamount: string;
+  currentamount: string;
+}
+
+export async function getActiveCart(signal?: AbortSignal): Promise<ApiCart[]> {
+  const response = await fetch("/api/cart?status=Active", { signal });
+
+  if(!response.ok){
+    throw new Error(`Could not load carts (${response.status}).`);
+  }
+  return response.json();
+}
+
+export function toCard(cart: ApiCart): CartDetails{
+  return {
+  id: cart.cartid,
+  owner: `User ${cart.owneruserid}`,
+  store: `Store ${cart.storeid}`,
+  pickupLocation: cart.location ?? "Pickup location pending",
+  timeLeft: Math.max(
+    0,
+    Math.ceil((Date.parse(cart.deadline) - Date.now()) / 60_000),
+  ),
+  threshold: parseFloat(cart.minimumamount),
+  curr: Number(cart.currentamount),
+  openSpots: 0,
+ };
 }
