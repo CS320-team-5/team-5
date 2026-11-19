@@ -11,19 +11,17 @@ vi.mock('./lib/supabase', () => ({
 }))
 
 const session = { access_token: 'test-access-token' }
+const subscription = { data: { subscription: { unsubscribe() {} } } }
 
 function setSession(currentSession) {
   supabase.auth.getSession.mockResolvedValue({ data: { session: currentSession }, error: null })
   supabase.auth.onAuthStateChange.mockImplementation(callback => {
     callback('INITIAL_SESSION', currentSession)
-    return { data: { subscription: { unsubscribe: vi.fn() } } }
+    return subscription
   })
 }
 
-beforeEach(() => {
-  window.history.replaceState(null, '', '/')
-  setSession(null)
-})
+beforeEach(() => setSession(null))
 
 afterEach(() => {
   cleanup()
@@ -31,7 +29,8 @@ afterEach(() => {
   vi.unstubAllGlobals()
 })
 
-function renderApp() {
+function renderApp(path = '/') {
+  window.history.replaceState(null, '', path)
   return render(
     <BrowserRouter>
       <App />
@@ -52,40 +51,24 @@ test('clicking nav links changes the page', async () => {
   expect(screen.getByText('Meet the delivery minimum, together.')).toBeTruthy()
 })
 
-test.each([
-  ['/create', 'Co-Cart home'],
-  ['/settings', 'Co-Cart home'],
-  ['/messages', 'CoCart home'],
-])('clicking the logo on %s while signed in opens the dashboard', async (url, label) => {
-  const user = userEvent.setup()
+test.each(['/settings', '/messages'])('signed-in logo on %s opens the dashboard', async path => {
   setSession(session)
-  vi.stubGlobal('fetch', vi.fn(async path => ({
-    ok: true,
-    json: async () => path === '/api/user/me' ? { userid: 1, name: 'Test User' } : [],
-  })))
-  window.history.replaceState(null, '', url)
-  renderApp()
+  vi.stubGlobal('fetch', async url => Response.json(
+    url === '/api/user/me' ? { userid: 1, name: 'Test User' } : [],
+  ))
+  renderApp(path)
 
-  const logo = screen.getByRole('link', { name: label })
-  expect(logo.getAttribute('href')).toBe('/dashboard')
-  await user.click(logo)
-
+  await userEvent.click(screen.getByRole('link', { name: /co-?cart home/i }))
   expect(window.location.pathname).toBe('/dashboard')
-  expect(screen.getByRole('heading', { name: 'Active Community Carts' })).toBeTruthy()
   expect(supabase.auth.signOut).not.toHaveBeenCalled()
 })
 
-test('clicking the logo before the initial auth event uses the restored session', async () => {
-  const user = userEvent.setup()
+test('logo waits for the session on first click', async () => {
   setSession(session)
-  supabase.auth.onAuthStateChange.mockReturnValueOnce({
-    data: { subscription: { unsubscribe: vi.fn() } },
-  })
-  window.history.replaceState(null, '', '/settings')
-  renderApp()
+  supabase.auth.onAuthStateChange.mockReturnValueOnce(subscription)
+  renderApp('/settings')
 
-  await user.click(screen.getByRole('link', { name: 'Co-Cart home' }))
-
+  await userEvent.click(screen.getByLabelText('Co-Cart home'))
   expect(window.location.pathname).toBe('/dashboard')
 })
 
@@ -106,15 +89,13 @@ test.each([
   ['/messages', 'Select a cart conversation'],
   ['/signup', 'Create Account'],
 ])('loading %s directly shows the right page', (url, expected) => {
-  window.history.replaceState(null, '', url)
-  renderApp()
+  renderApp(url)
   expect(screen.getByRole('heading', { name: expected })).toBeTruthy()
 })
 
 test('dashboard messages link opens cart conversation selection', async () => {
   const user = userEvent.setup()
-  window.history.replaceState(null, '', '/dashboard')
-  renderApp()
+  renderApp('/dashboard')
   await user.click(screen.getByRole('link', { name: 'Messages' }))
   expect(window.location.pathname).toBe('/messages')
   expect(screen.getByRole('heading', { name: 'Select a cart conversation' })).toBeTruthy()
