@@ -3,6 +3,9 @@
   background: #f8fafc;
   display: flex;
   flex-direction: column;
+  font-family: "Outfit", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: bold;
 }
 
 .signup-page .signup-header {
