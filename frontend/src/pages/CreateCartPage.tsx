@@ -6,6 +6,7 @@ import Banner from '../components/Banner';
 import { useEffect, useState } from "react";
 import { createCart } from "../services/cart";
 import { createStore, type StoreInput } from "../services/store";
+import { UserRoundGroup } from "lucide-react";
 
 type StoreOption = {
   storeid: number;
@@ -348,10 +349,10 @@ const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.
                     </div>
                   </div>
                 </div>
-                <div id="notice-section">
+                <div className="notice-section">
                   <span><img src="/piggy_bank.svg" /></span>
                   <div className={theme["info-text"]}>
-                    Future cart participants need to add <span id="diff-text">${Math.max(0,Number(priceValues.targetMin) - Number(priceValues.initValue)).toFixed(2)}</span> to reach minimum
+                    Future cart participants need to add <span className="notice-text">${Math.max(0,Number(priceValues.targetMin) - Number(priceValues.initValue)).toFixed(2)}</span> to reach minimum
                   </div>
                 </div>
               </div>
@@ -403,6 +404,12 @@ const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.
                   <option value={9} label='9'></option>
                   <option value={10} label='10'></option>
                 </datalist>
+              </div>
+              <div className="notice-section">
+                <span><UserRoundGroup/></span>
+                <div className={theme["info-text"]}>
+                  You're allowing at most <span className="notice-text">{maxParticipationCount-1}</span> other {maxParticipationCount-1 > 1 ? "people" : "person"} to contribute to the cart
+                </div>
               </div>
               <div id="notes-section">
                 <label htmlFor="notes-input" className="form-text">7. Notes (Optional)</label>

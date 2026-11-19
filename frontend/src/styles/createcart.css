@@ -11,8 +11,8 @@
   color: var(--general-text-color);
 }
 
-/* appears just for the price difference between the target and spending */
-#create-cart-page #diff-text {
+/* appears for the notice sections */
+#create-cart-page .notice-text {
   font-family: "Outfit", sans-serif;
   font-size: 18px;
   color: var(--primary-green);
@@ -96,7 +96,7 @@
 }
 
 /* could be standardized */
-#create-cart-page .general-container, #price-container, #notice-section, #safety-container {
+#create-cart-page .general-container, #price-container, .notice-section, #safety-container {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -108,7 +108,7 @@
   gap: 16px;
 }
 
-#notice-section {
+.notice-section {
   background-color: #86F8C24D;
   border-radius: 8px;
   padding: 16px;
