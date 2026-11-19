@@ -104,6 +104,11 @@ export function CreateCartPage() {
         setIsSubmitting(false);
       }
     };
+
+  // keeps track of the max participation count and displays to user;
+  // could also use some sort of notice below it to indicate
+  const [maxParticipationCount, setMPC] = useState(2);
+
   const [stores, setStores] = useState<StoreOption[]>([]);
   const [storesLoading, setStoresLoading] = useState(true);
   const [storeError, setStoreError] = useState("");
@@ -195,8 +200,20 @@ const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.
           </div>
           <div>
             <form action="" method="get" id="cart-form" onSubmit={handleFormSubmit}>
+              <div className='form-text'>
+                <label htmlFor="cart-name">1. Cart Name</label>
+                  <input 
+                    type="text"
+                    id="cart-name-input"
+                    name="cart-name"
+                    maxLength={20}
+                    placeholder="Enter a name for the cart (ex: Late Night Taco Bell)"
+                    className={theme["info-text"]}
+                    required
+                  />
+              </div>
               <div className="form-text">
-                <label htmlFor="store-input">1. Store or Restaurant</label>
+                <label htmlFor="store-input">2. Store or Restaurant</label>
                   <input
                     type="text"
                     id="store-input"
@@ -304,7 +321,7 @@ const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.
                 )}
               </div>
               <div className="form-text" id="price-section">
-                2. Order Minimum & Your Share
+                3. Order Minimum & Your Share
                 <div id="price-container">
                   <div className={theme["small-text"]}>
                     <label htmlFor="threshold">Target Minimum</label>
@@ -340,7 +357,7 @@ const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.
               </div>
               <div id="location-section">
                 <label htmlFor="location-input" className="form-text">
-                  3. Pickup Location (Common Spot)
+                  4. Pickup Location (Common Spot)
                 </label>
                 <input
                   type="text" id="location-input" name="location-input"
@@ -362,14 +379,33 @@ const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.
                   </div>
               </div>
               <div id="deadline-section">
-                <label htmlFor="deadline-input" className="form-text">4. Deadline</label>
+                <label htmlFor="deadline-input" className="form-text">5. Deadline</label>
                 <input
                   type="datetime-local" id="deadline-input" name="deadline-input"
                   required
                 />
               </div>
+              <div id="participation-section">
+                <label htmlFor="max-participant-count" className='form-text'>6. Max participant count (including you): {maxParticipationCount}</label>
+                <input
+                  type="range" id="max-cart-input" name="max-participant-count" className={theme["info-text"]}
+                  min={2} max={10} step={1} list="tick-marks" defaultValue={2}
+                  onChange={(e) => setMPC(Number(e.target.value))}
+                />
+                <datalist id="tick-marks">
+                  <option value={2} label="2"></option>
+                  <option value={3} label="3"></option>
+                  <option value={4} label="4"></option>
+                  <option value={5} label='5'></option>
+                  <option value={6} label='6'></option>
+                  <option value={7} label='7'></option>
+                  <option value={8} label='8'></option>
+                  <option value={9} label='9'></option>
+                  <option value={10} label='10'></option>
+                </datalist>
+              </div>
               <div id="notes-section">
-                <label htmlFor="notes-input" className="form-text">5. Notes (Optional)</label>
+                <label htmlFor="notes-input" className="form-text">7. Notes (Optional)</label>
                 <input
                   type="text" id="notes-input" name="notes-input" maxLength={500} className={theme["info-text"]}
                   placeholder="e.g. Ordering one large pizza, will text when courier arrives"

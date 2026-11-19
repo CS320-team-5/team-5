@@ -73,7 +73,7 @@
   font-family: "Plus Jakarta Sans";
 }
 /* this can be made standard across the input types for the forms */
-#create-cart-page #store-input, .price-input, #location-input, #deadline-input, #notes-input {
+#create-cart-page #store-input, .price-input, #location-input, #deadline-input, #notes-input, #cart-name-input, #max-cart-input {
   width: 100%;
   height: 44px;
   border: none;
@@ -122,6 +122,11 @@
   font-family: 'Outfit', sans-serif;
   font-size: 18px;
 }
+
+#max-cart-input {
+  box-shadow: none;
+}
+
 /* could make this a standard for all form submission buttons */
 #create-cart-page #submitBtn {
   width: 100%;
