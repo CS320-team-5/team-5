@@ -1,9 +1,12 @@
+// @ts-ignore
 import '../styles/createcart.css';
-import '../styles/theme.css';
+// @ts-ignore
+import theme from '../styles/theme.module.css';
 import Banner from '../components/Banner';
 import { useEffect, useState } from "react";
 import { createCart } from "../services/cart";
 import { createStore, type StoreInput } from "../services/store";
+import { UserRoundGroup } from "lucide-react";
 
 type StoreOption = {
   storeid: number;
@@ -13,7 +16,6 @@ type StoreOption = {
 export function CreateCartPage() {
   const d = new Date();
   /** Simply accepts a number, turns it into a string, and pads the start with 0s */
-  const format = (n: number): string => n.toString().padStart(2, '0');
   // getFullYear because getYear is deprecated
   // getMonth+1 because getMonth is 0-based
   // getDate because getDay gets you the DAY OF THE WEEK
@@ -103,6 +105,11 @@ export function CreateCartPage() {
         setIsSubmitting(false);
       }
     };
+
+  // keeps track of the max participation count and displays to user;
+  // could also use some sort of notice below it to indicate
+  const [maxParticipationCount, setMPC] = useState(2);
+
   const [stores, setStores] = useState<StoreOption[]>([]);
   const [storesLoading, setStoresLoading] = useState(true);
   const [storeError, setStoreError] = useState("");
@@ -189,13 +196,25 @@ const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.
       <div id="form-section">
         <div id="form-container">
           <div id="start-cart-header">
-            <div id="page-title">Start a Cart</div>
-            <div className="info-text">Set up a shared order so others can add to your cart.</div>
+            <div className={theme["page-title"]}>Start a Cart</div>
+            <div className={theme["info-text"]}>Set up a shared order so others can add to your cart.</div>
           </div>
           <div>
             <form action="" method="get" id="cart-form" onSubmit={handleFormSubmit}>
+              <div className='form-text'>
+                <label htmlFor="cart-name">1. Cart Name</label>
+                  <input 
+                    type="text"
+                    id="cart-name-input"
+                    name="cart-name"
+                    maxLength={20}
+                    placeholder="Enter a name for the cart (ex: Late Night Taco Bell)"
+                    className={theme["info-text"]}
+                    required
+                  />
+              </div>
               <div className="form-text">
-                <label htmlFor="store-input">1. Store or Restaurant</label>
+                <label htmlFor="store-input">2. Store or Restaurant</label>
                   <input
                     type="text"
                     id="store-input"
@@ -203,7 +222,7 @@ const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.
                     value={storeName}
                     maxLength={20}
                     placeholder="Search or enter a store name"
-                    className="general-text"
+                    className={theme["info-text"]}
                     required
                     disabled={isAddingStore}
                     onChange={(event) => {
@@ -303,9 +322,9 @@ const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.
                 )}
               </div>
               <div className="form-text" id="price-section">
-                2. Order Minimum & Your Share
+                3. Order Minimum & Your Share
                 <div id="price-container">
-                  <div className="small-text">
+                  <div className={theme["small-text"]}>
                     <label htmlFor="threshold">Target Minimum</label>
                     <div className="general-container">
                       <span className="price-text">$</span>
@@ -317,7 +336,7 @@ const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.
                       />
                     </div>
                   </div>
-                  <div className="small-text" style={{"gap": 4}}>
+                  <div className={theme["small-text"]} style={{"gap": 4}}>
                     <label htmlFor="start_amount">What you're spending</label>
                     <div className="general-container">
                       <span className="price-text">$</span>
@@ -330,21 +349,21 @@ const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.
                     </div>
                   </div>
                 </div>
-                <div id="notice-section">
+                <div className="notice-section">
                   <span><img src="/piggy_bank.svg" /></span>
-                  <div className="info-text">
-                    Future cart participants need to add <span id="diff-text">${Math.max(0,Number(priceValues.targetMin) - Number(priceValues.initValue)).toFixed(2)}</span> to reach minimum
+                  <div className={theme["info-text"]}>
+                    Future cart participants need to add <span className="notice-text">${Math.max(0,Number(priceValues.targetMin) - Number(priceValues.initValue)).toFixed(2)}</span> to reach minimum
                   </div>
                 </div>
               </div>
               <div id="location-section">
                 <label htmlFor="location-input" className="form-text">
-                  3. Pickup Location (Common Spot)
+                  4. Pickup Location (Common Spot)
                 </label>
                 <input
                   type="text" id="location-input" name="location-input"
                   list="prev-locations" placeholder="Type or select..." required
-                  className="info-text"
+                  className={theme["info-text"]}
                 />
 
                 <datalist id="prev-locations">
@@ -357,20 +376,45 @@ const matchingStores = storeSearch.length >= 2 ? stores.filter((store) => store.
                 </datalist>
                 <div id="safety-container">
                   <span><img src="/lock.svg" /></span>
-                  <div className="small-text">Safety consideration: choose a public location to keep private addresses private.</div>
+                  <div className={theme["small-text"]}>Safety consideration: choose a public location to keep private addresses private.</div>
                   </div>
               </div>
               <div id="deadline-section">
-                <label htmlFor="deadline-input" className="form-text">4. Deadline</label>
+                <label htmlFor="deadline-input" className="form-text">5. Deadline</label>
                 <input
                   type="datetime-local" id="deadline-input" name="deadline-input"
                   required
                 />
               </div>
-              <div id="notes-section">
-                <label htmlFor="notes-input" className="form-text">5. Notes (Optional)</label>
+              <div id="participation-section">
+                <label htmlFor="max-participant-count" className='form-text'>6. Max participant count (including you): {maxParticipationCount}</label>
                 <input
-                  type="text" id="notes-input" name="notes-input" maxLength={500} className="info-text"
+                  type="range" id="max-cart-input" name="max-participant-count" className={theme["info-text"]}
+                  min={2} max={10} step={1} list="tick-marks" defaultValue={2}
+                  onChange={(e) => setMPC(Number(e.target.value))}
+                />
+                <datalist id="tick-marks">
+                  <option value={2} label="2"></option>
+                  <option value={3} label="3"></option>
+                  <option value={4} label="4"></option>
+                  <option value={5} label='5'></option>
+                  <option value={6} label='6'></option>
+                  <option value={7} label='7'></option>
+                  <option value={8} label='8'></option>
+                  <option value={9} label='9'></option>
+                  <option value={10} label='10'></option>
+                </datalist>
+              </div>
+              <div className="notice-section">
+                <span><UserRoundGroup/></span>
+                <div className={theme["info-text"]}>
+                  You're allowing at most <span className="notice-text">{maxParticipationCount-1}</span> other {maxParticipationCount-1 > 1 ? "people" : "person"} to contribute to the cart
+                </div>
+              </div>
+              <div id="notes-section">
+                <label htmlFor="notes-input" className="form-text">7. Notes (Optional)</label>
+                <input
+                  type="text" id="notes-input" name="notes-input" maxLength={500} className={theme["info-text"]}
                   placeholder="e.g. Ordering one large pizza, will text when courier arrives"
                 />
               </div>{submitError && <p role="alert">{submitError}</p>}{submitSuccess && <p role="status">{submitSuccess}</p>}

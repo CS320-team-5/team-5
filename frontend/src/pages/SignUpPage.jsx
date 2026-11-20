@@ -4,7 +4,7 @@ import { useNavigate } from "react-router";
 import { ArrowRight, MapPin } from "lucide-react";
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
-import "../styles/theme.css";
+import theme from "../styles/theme.module.css";
 import { ShoppingBasket } from "lucide-react";
 
 
@@ -81,9 +81,9 @@ export default function SignUpPage() {
     <main className="signup-page">
 
       <header className="signup-header">
-        <Link id="left-banner-part" to="/" aria-label="Co-Cart home">
+        <Link className={theme["left-banner-part"]} to="/" aria-label="Co-Cart home">
           <ShoppingBasket color="var(--primary-green)"/>
-          <span id="logo-title">Co-Cart</span>
+          <span className={theme["logo-title"]}>Co-Cart</span>
         </Link>
 
         <Link className="login-button" to="/login">

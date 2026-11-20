@@ -11,14 +11,14 @@
 }
 
 /* rule for page background/general details */
-#page-structure {
+.page-structure {
   background-color: var(--page-bg-color);
   min-height: 100vh;
   padding: 16px 24px;
 }
 
 /* use these for form submission buttons at the end of the page */
-#submitFormBtn {
+.submitFormBtn {
   width: 100%;
   height: 52px;
   border-radius: 8px;
@@ -26,12 +26,12 @@
   background-color: var(--primary-green);
   border: none;
 }
-#submitFormBtn:hover {
+.submitFormBtn:hover {
   background-color: var(--secondary-green);
 }
 
 /* STYLES REQUIRED FOR THE BANNER */
-#banner {
+.banner {
   position: sticky;
   top: 0;
   z-index: 9999;
@@ -42,26 +42,26 @@
   padding: 8px 0;
   background: #F8F9FF;
 }
-#center-banner-part,
-#left-banner-part,
-#right-banner-part {
+.center-banner-part,
+.left-banner-part,
+.right-banner-part {
   display: flex;
   align-items: center;
 }
-#left-banner-part {
+.left-banner-part {
   justify-self: start;
   gap: 8px;
   text-decoration: none;
 }
-#center-banner-part {
+.center-banner-part {
   gap: 4px;
 
 }
-#right-banner-part {
+.right-banner-part {
   justify-self: end;
 }
 /* Style for the "Co-Cart" text next to the logo in the top left */
-#logo-title {
+.logo-title {
   font-family: "Outfit", sans-serif;
   font-optical-sizing: auto;
   font-weight: bold;
@@ -128,7 +128,7 @@
   - "Messages" on messages page
 */
 /* rules for "Active Community Carts" section */
-#page-title {
+.page-title {
   margin: 0;
   font-size: 32px;
   font-family: "Outfit", sans-serif;
@@ -137,7 +137,7 @@
 }
 
 /* summary/info text -- general information */
-.info-text {
+.info-text, .small-text {
   font-family: "Plus Jakarta Sans", sans-serif;
   font-weight: normal;
   font-size: 14px;
@@ -146,4 +146,9 @@
 /* can use this alongside info text to make smaller text */
 .small-font {
   font-size: 12px;
+}
+
+.small-text {
+  font-size: 12px;
+  font-weight: bold;
 }
