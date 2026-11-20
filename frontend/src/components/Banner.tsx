@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 // @ts-ignore
-import theme from "../styles/theme.module.css";
+import theme from "../styles/theme.module.css"; 
 import { ShoppingBasket } from "lucide-react";
 import AppHomeLink from "./AppHomeLink";
 
@@ -64,10 +64,10 @@ function Banner() {
   ).toUpperCase();
   return (
     <header className={theme["banner"]}>
-      <Link className={theme["left-banner-part"]} to="/" aria-label="Co-Cart home">
+      <AppHomeLink label="Co-Cart home">
         <ShoppingBasket color="var(--primary-green)"/>
         <span className={theme["logo-title"]}>Co-Cart</span>
-      </Link>
+      </AppHomeLink>
       <nav className={theme["center-banner-part"]} aria-label="Dashboard navigation">
         <Link className={theme["banner-button"]} to="/dashboard" aria-current="page">Browse Carts</Link>
         <Link className={theme["banner-button"]} to="/create" aria-current="page">Start a Cart</Link>

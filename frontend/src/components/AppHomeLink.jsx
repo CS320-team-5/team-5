@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { supabase } from '../lib/supabase'
 import { getSession } from '../services/auth'
+import theme from "../styles/theme.module.css"
 
 export default function AppHomeLink({ children, label }) {
   const [signedIn, setSignedIn] = useState(null)
@@ -26,7 +27,7 @@ export default function AppHomeLink({ children, label }) {
   }
 
   return (
-    <Link id="left-banner-part" to={signedIn ? '/dashboard' : '/'} aria-label={label} onClick={handleClick}>
+    <Link className={theme["left-banner-part"]} to={signedIn ? '/dashboard' : '/'} aria-label={label} onClick={handleClick}>
       {children}
     </Link>
   )

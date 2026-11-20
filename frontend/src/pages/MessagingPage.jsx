@@ -5,6 +5,7 @@ import { getMyProfile, getMyMessageCarts, getCartMessages, getCartMembers, getPu
 import '../styles/dashboard.css'
 import '../styles/messaging.css'
 import AppHomeLink from '../components/AppHomeLink'
+import Banner from "../components/Banner";
 
 const initialsFor = (name) => (name || '?').split(/\s+/).slice(0, 2).map(part => part[0] || '').join('').toUpperCase()
 const formatTime = (timestamp) => new Date(timestamp).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
