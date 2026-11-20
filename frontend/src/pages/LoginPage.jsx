@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { signIn } from "../services/auth";
-import "../styles/theme.module.css";
+import theme from "../styles/theme.module.css";
 import { ShoppingBasket } from "lucide-react";
 
 export default function LoginPage() {

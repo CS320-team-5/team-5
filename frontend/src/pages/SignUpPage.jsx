@@ -4,7 +4,7 @@ import { useNavigate } from "react-router";
 import { ArrowRight, MapPin } from "lucide-react";
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
-import "../styles/theme.module.css";
+import theme from "../styles/theme.module.css";
 import { ShoppingBasket } from "lucide-react";
 
 
