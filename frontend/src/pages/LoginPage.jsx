@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { signIn } from "../services/auth";
-import "../styles/theme.css";
+import "../styles/theme.module.css";
 import { ShoppingBasket } from "lucide-react";
 
 export default function LoginPage() {
@@ -42,9 +42,9 @@ export default function LoginPage() {
   return (
     <main className="signup-page">
       <header className="signup-header">
-        <Link id="left-banner-part" to="/" aria-label="Co-Cart home">
+        <Link className={theme["left-banner-part"]} to="/" aria-label="Co-Cart home">
           <ShoppingBasket color="var(--primary-green)"/>
-          <span id="logo-title">Co-Cart</span>
+          <span className={theme["logo-title"]}>Co-Cart</span>
         </Link>
 
         <Link className="login-button" to="/signup">
