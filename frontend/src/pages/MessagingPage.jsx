@@ -4,7 +4,7 @@ import { MapPin, Send, ShoppingBasket } from 'lucide-react'
 import { getMyProfile, getMyMessageCarts, getCartMessages, getCartMembers, getPublicUser, sendCartMessage } from '../services/message'
 import '../styles/dashboard.css'
 import '../styles/messaging.css'
-import Banner from "../components/Banner";
+import AppHomeLink from '../components/AppHomeLink'
 
 const initialsFor = (name) => (name || '?').split(/\s+/).slice(0, 2).map(part => part[0] || '').join('').toUpperCase()
 const formatTime = (timestamp) => new Date(timestamp).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
@@ -163,10 +163,10 @@ function MessagingPage() {
   return (
     <div className="dashboard-page messaging-page">
       <header id="banner">
-        <Link id="left-banner-part" to="/" aria-label="CoCart home">
+        <AppHomeLink label="CoCart home">
           <ShoppingBasket className="brand-icon" size={32} aria-hidden="true" />
           <span id="logo-title">Co-Cart</span>
-        </Link>
+        </AppHomeLink>
         <nav id="center-banner-part" aria-label="Main navigation">
           <Link className="banner-button" to="/dashboard">Browse Carts</Link>
           <Link className="banner-button" to="/create">Start a Cart</Link>

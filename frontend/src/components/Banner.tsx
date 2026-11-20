@@ -1,6 +1,8 @@
 import { Link } from "react-router";
 import "../styles/theme.css";
 import { ShoppingBasket } from "lucide-react";
+import AppHomeLink from "./AppHomeLink";
+
 import { useEffect, useState } from "react";
 import { getCurrentUser, type UserProfile } from "../services/user";
 import { supabase } from "../lib/supabase";
@@ -61,10 +63,10 @@ function Banner() {
   ).toUpperCase();
   return (
     <header id="banner">
-      <Link id="left-banner-part" to="/" aria-label="Co-Cart home">
+      <AppHomeLink label="Co-Cart home">
         <ShoppingBasket color="var(--primary-green)"/>
         <span id="logo-title">Co-Cart</span>
-      </Link>
+      </AppHomeLink>
       <nav id="center-banner-part" aria-label="Dashboard navigation">
         <Link className="banner-button" to="/dashboard" aria-current="page">Browse Carts</Link>
         <Link className="banner-button" to="/create" aria-current="page">Start a Cart</Link>
